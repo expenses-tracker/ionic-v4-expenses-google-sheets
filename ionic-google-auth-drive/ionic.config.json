@@ -1,0 +1,8 @@
+{
+  "name": "ionic-google-auth-drive",
+  "app_id": "",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
