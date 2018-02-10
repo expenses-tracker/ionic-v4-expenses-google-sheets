@@ -23,6 +23,7 @@ export class HomePage {
    */
   signInWithGoogle() {
     this.googlePlus.login({
+      'scopes': 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata',
       'webClientId': '1004371791417-1fqtb5uppq99qdesjk85gonrfu24c9oi.apps.googleusercontent.com',
       'offline': true
     })

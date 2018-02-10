@@ -14,22 +14,24 @@
 
 
 <ion-content padding>
-  <ion-card *ngIf="userInfo">
+  <ion-card *ngIf="driveAbout">
       <br>
       <ion-avatar>
-        <img class="avatar" [src]="userInfo.imageUrl" />
+        <img class="avatar" [src]="driveAbout.photoLink" />
       </ion-avatar>
       <br>
     <ion-card-header>
-      {{userInfo.displayName}}
+      {{driveAbout.displayName}}
     </ion-card-header>
     <ion-card-content>
       <ion-grid>
         <ion-row>
           <ion-col col-3>Email</ion-col>
-          <ion-col col-9>{{userInfo.email}}</ion-col>
+          <ion-col col-9>{{driveAbout.emailAddress}}</ion-col>
         </ion-row>
       </ion-grid>
     </ion-card-content>
   </ion-card>
+<br>
+<button ion-button block (click)="accessExpenseTracker()">Access Expense Tracker</button>
 </ion-content>
