@@ -7,16 +7,21 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Select file</ion-title>
+    <ion-title>{{title}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <ion-list>
+  <ion-list *ngIf="loadFiles">
     <button ion-item *ngFor="let item of files" (click)="fileSelected(item)">
       {{ item }}
+    </button>  
+  </ion-list>
+  <ion-list *ngIf="!loadFiles">
+    <button ion-item *ngFor="let item of sheets" (click)="sheetSelected(item)">
+      {{ item.title }}
     </button>  
   </ion-list>
 </ion-content>

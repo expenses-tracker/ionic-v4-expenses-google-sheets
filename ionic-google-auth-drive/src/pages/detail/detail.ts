@@ -26,20 +26,13 @@ export class DetailPage {
     private gapiHandler: GapiHandlerProvider) {
       this.presentLoading();
     this.title = this.navParams.get('title');
+    this.spreadSheetData = this.navParams.get('sheetData');
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad DetailPage');
-    this.gapiHandler.getSpreadSheetData(this.navParams.get('id')).subscribe((data: any) => {
-      
-      // this.zone.run(() => {
-        this.spreadSheetData = data.result.sheets[0];
-        console.log(this.spreadSheetData);
-      this.totalamount = this.spreadSheetData.data[0].rowData[2].values[3].effectiveValue.numberValue;
-      console.log(this.totalamount);
-      // });
-      this.loader.dismiss();
-    });
+    console.log(this.spreadSheetData);
+    this.loader.dismiss();
+    
   }
 
   presentLoading() {

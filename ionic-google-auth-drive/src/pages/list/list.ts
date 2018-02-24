@@ -1,7 +1,8 @@
 import { DetailPage } from './../detail/detail';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, Loading, ModalController } from 'ionic-angular';
+import * as _ from 'lodash';
 
 /**
  * Generated class for the ListPage page.
@@ -20,11 +21,17 @@ export class ListPage {
   files = ['Expense tracker - 2018', 'Logins'];
   loader: Loading;
   selectedFile: string;
+  selectedSheet: string;
+  loadFiles: boolean = true;
+  sheets: Array<{sheetId: string, title: string}> = [];
+  title: string = 'Select file';
+  spreadSheetData: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private gapiHandler: GapiHandlerProvider,
     public loadingCtrl: LoadingController,
-    private modalCtrl: ModalController) {
+    private modalCtrl: ModalController,
+    private zone: NgZone) {
   }
 
   ionViewDidLoad() {
@@ -36,13 +43,39 @@ export class ListPage {
     this.presentLoading();
     this.gapiHandler.getSpreadSheetIdForExcel(item).subscribe((response: any) => {
       console.log(response.id);
-      this.loader.dismiss();
-       const detailModal = this.modalCtrl.create(DetailPage, {
-          'title': this.selectedFile,
-          'id': response.id
-        });
-        detailModal.present();
+      this.gapiHandler.getSpreadSheetData(response.id).subscribe((data: any) => {
+        this.spreadSheetData = data.result.sheets;
+        // console.log(this.spreadSheetData);
+        this.loadSheets(this.spreadSheetData);
+        this.loader.dismiss();
+      });
     });
+  }
+
+  public sheetSelected(item) {
+    this.selectedSheet = item.title;
+    let sheetData: any;
+    sheetData = _.find(this.spreadSheetData, (o) => { return o.properties.title === this.selectedSheet });
+    const detailModal = this.modalCtrl.create(DetailPage, {
+      'title': this.selectedSheet,
+      'sheetData': sheetData
+    });
+    detailModal.present();
+  }
+
+  private loadSheets(data: any) {
+    if(data) {
+      data.forEach(element => {
+        this.sheets.push({
+          sheetId: element.properties.sheetId,
+          title: element.properties.title
+        });
+      });
+      this.zone.run(() => {
+        this.title = 'Select sheet'
+        this.loadFiles = false;
+      });
+    }
   }
 
   presentLoading() {
