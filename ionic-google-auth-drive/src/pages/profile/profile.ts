@@ -2,8 +2,6 @@ import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler
 import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-declare var gapi: any;
-
 /**
  * Generated class for the ProfilePage page.
  *

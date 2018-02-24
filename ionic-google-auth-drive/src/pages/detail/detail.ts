@@ -1,5 +1,5 @@
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 
 /**
@@ -23,8 +23,7 @@ export class DetailPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public loadingCtrl: LoadingController,
-    private gapiHandler: GapiHandlerProvider,
-    private zone: NgZone) {
+    private gapiHandler: GapiHandlerProvider) {
       this.presentLoading();
     this.title = this.navParams.get('title');
   }

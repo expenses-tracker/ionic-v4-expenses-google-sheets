@@ -1,6 +1,5 @@
 import { DetailPage } from './../detail/detail';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
-import { StorageHandlerProvider } from './../../providers/storage-handler/storage-handler';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, Loading, ModalController } from 'ionic-angular';
 
@@ -23,7 +22,6 @@ export class ListPage {
   selectedFile: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage: StorageHandlerProvider,
     private gapiHandler: GapiHandlerProvider,
     public loadingCtrl: LoadingController,
     private modalCtrl: ModalController) {

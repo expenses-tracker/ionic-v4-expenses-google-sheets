@@ -2,8 +2,6 @@ import { ListPage } from './../list/list';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
 import { Component } from '@angular/core';
 import { NavController, AlertController, ModalController, Platform, LoadingController, Loading } from 'ionic-angular';
-import { GooglePlus } from '@ionic-native/google-plus';
-import { ProfilePage } from '../profile/profile';
 
 @Component({
   selector: 'page-home',
@@ -15,7 +13,6 @@ export class HomePage {
 
   constructor(
     public navCtrl: NavController,
-    private googlePlus: GooglePlus,
     public alertCtrl: AlertController,
     public modalCtrl: ModalController,
     private gapiHandler: GapiHandlerProvider,
