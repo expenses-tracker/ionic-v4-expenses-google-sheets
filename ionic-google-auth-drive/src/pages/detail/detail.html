@@ -9,16 +9,70 @@
   <ion-navbar>
     <ion-title>{{title}}</ion-title>
   </ion-navbar>
+  <ion-toolbar>
+    <!-- Card displaying the aggregates of expenses in different category -->
+  <ion-card>
+      <ion-card-header style="white-space:normal; font-weight:700;">
+        Expenses: Rs {{aggregates.expenses}}
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <b>Household: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.household}}</div>
+            </ion-col>
+            <ion-col>
+              <b>Travel: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.travel}}</div> 
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <b>Bills: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.bills}}</div>
+            </ion-col>
+            <ion-col>
+              <b>Food: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.outsideFoods}}</div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <b>Shopping: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.shopping}}</div>
+            </ion-col>
+            <ion-col>
+              <b>Others: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.others}}</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ion-toolbar>
 </ion-header>
 
 
 <ion-content padding>
-  <ion-card>
-    <ion-card-header>
-      Expense Details
-    </ion-card-header>
-    <ion-card-content>
-      {{totalamount}}
-    </ion-card-content>
-  </ion-card>
+  <!-- List of expenses -->
+  <ion-list>
+    <ion-item *ngFor="let expense of expensesList" (click)="editExpense(expense)">
+        <ion-grid>
+            <ion-row>
+              <ion-col col-9 style="white-space:normal; font-weight:500;">
+                <b>{{expense.description}}</b>
+              </ion-col>
+              <ion-col col-3 style="text-align:right; color:brown">
+                Rs {{expense.amount}}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-8 style="white-space:normal; color: darkturquoise;">
+                  {{expense.paymentType}}
+                </ion-col>
+                <ion-col col-4 style="text-align:right; color: slategrey;">
+                  {{expense.date}}
+                </ion-col>
+              </ion-row>
+        </ion-grid>
+    </ion-item>
+  </ion-list>
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
 </ion-content>
