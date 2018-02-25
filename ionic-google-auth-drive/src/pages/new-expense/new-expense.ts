@@ -27,6 +27,7 @@ export class NewExpensePage {
   paymentType: string;
   amount: number;
   category: string;
+  expenseIdx: number;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private gapiHandler: GapiHandlerProvider,
@@ -37,11 +38,25 @@ export class NewExpensePage {
     this.spreadsheetId = this.navParams.get('spreadsheetId');
     // console.log('SpreadSheetId to search: '+ this.spreadsheetId);
     this.noOfExpenses = this.navParams.get('noOfExpenses');
+    if (this.navParams.get('edit')) {
+      // console.log(this.navParams.get('expenseData'));
+      const expense = this.navParams.get('expenseData');
+      this.date = expense.date;
+      this.description = expense.description;
+      this.amount = expense.amount;
+      this.paymentType = expense.paymentType;
+      this.category = expense.category;
+      this.expenseIdx = expense.id;
+    }
     this.getPaymentTypes();
   }
 
   ionViewDidLoad() {
     // console.log('ionViewDidLoad NewExpensePage');
+  }
+
+  ionViewWillUnload(){
+   this.expenseIdx = undefined;
   }
 
   private getPaymentTypes() {
@@ -94,6 +109,37 @@ export class NewExpensePage {
     // Set the range for update
     const range: string = this.navParams.get('sheet') + '!A' + (this.noOfExpenses + 1) + ':J' + (this.noOfExpenses + 1);
     this.gapiHandler.addDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
+      // console.log(data);
+      this.loader.dismiss();
+      this.viewCtrl.dismiss({refresh: true});
+    }, (err) => {
+      console.log(err);
+      this.showError(err);
+    });
+  }
+
+  public editExpense() {
+    this.presentLoading();
+    const body = [
+      [this.date],
+      [this.description],
+      [this.paymentType],
+      [this.amount],
+      [''], [''], [''], [''], [''], ['']];
+
+    // Find index of selected category from categories list
+    const categoryIdx = _.findIndex(this.categories, (o) => {
+      return o === this.category;
+    });
+    // set the index of category object to update in body array
+    const replaceIdx = 4 + categoryIdx;
+    // console.log('Replace index: ' + replaceIdx);
+    // Replace null with user entered amount for category
+    body[replaceIdx] = [this.amount];
+    this.expenseIdx = this.expenseIdx + 1;
+    // Set the range for update
+    const range: string = this.navParams.get('sheet') + '!A' + this.expenseIdx + ':J' + this.expenseIdx;
+    this.gapiHandler.updateDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
       // console.log(data);
       this.loader.dismiss();
       this.viewCtrl.dismiss({refresh: true});

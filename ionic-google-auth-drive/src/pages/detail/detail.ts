@@ -28,7 +28,8 @@ export class DetailPage {
     date: string,
     description: string,
     paymentType: string,
-    amount: string
+    amount: string,
+    category: string
   }> = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -75,6 +76,7 @@ export class DetailPage {
   }
 
   private loadExpenses() {
+    this.expensesList = [];
     const data = this.spreadSheetData.data[0].rowData;
     for (let index = (data.length - 1); index > 2; index--) {
       const element = data[index].values;
@@ -84,7 +86,8 @@ export class DetailPage {
           date: element[0].formattedValue,
           description: element[1].formattedValue,
           paymentType: element[2].formattedValue,
-          amount: element[3].formattedValue
+          amount: element[3].formattedValue,
+          category: this.identifyCategory(element)
         });
       }
     }
@@ -92,42 +95,61 @@ export class DetailPage {
   }
 
   public editExpense(expense) {
-    console.log('Edit expense' + JSON.stringify(expense));
-  }
-
-  public addExpense() {
-    const expenses = this.spreadSheetData.data[0].rowData;
+    // console.log('Edit expense' + JSON.stringify(expense));
     const detailModal = this.modalCtrl.create(NewExpensePage, {
       'spreadsheetId': this.spreadsheetId,
       'noOfExpenses': this.expensesList.length + 3,
-      'sheet': this.title
+      'sheet': this.title,
+      'edit': true,
+      'expenseData': expense
     });
     detailModal.onDidDismiss((data) => {
       if(data) {
         if(data.refresh) {
           this.presentLoading();
-          this.zone.run(() => {
-            this.refreshData();
-          });
+          this.refreshData();
         }
       }
     });
     detailModal.present();
   }
 
-  doInfinite(infiniteScroll) {
-    setTimeout(() => {
-      this.loadExpenses();
-      infiniteScroll.complete();
-    }, 100);
+  public addExpense() {
+    const detailModal = this.modalCtrl.create(NewExpensePage, {
+      'spreadsheetId': this.spreadsheetId,
+      'noOfExpenses': this.expensesList.length + 3,
+      'sheet': this.title,
+      'edit': false
+    });
+    detailModal.onDidDismiss((data) => {
+      if(data) {
+        if(data.refresh) {
+          this.presentLoading();
+          this.refreshData();
+        }
+      }
+    });
+    detailModal.present();
   }
 
   private refreshData() {
     this.gapiHandler.getSpreadSheetData(this.spreadsheetId).subscribe((data: any) => {
       const spreadSheetData = data.result.sheets;
-      this.spreadSheetData = _.find(spreadSheetData, (o) => { return o.properties.title === this.title });
+      this.zone.run(() => {
+        this.spreadSheetData = _.find(spreadSheetData, (o) => { return o.properties.title === this.title });
+        this.loadAggregates();
+        this.loadExpenses();
+      });
       this.loader.dismiss();
     });
+  }
+
+  private identifyCategory(expense: Array<any>) {
+    const defaultCategorues = ['Household', 'Travel', 'Bills', 'Outside Food', 'Shopping', 'Others'];
+    const expenseDataLength = expense.length;
+    const categoryIdx = expenseDataLength - 5;
+    const category = defaultCategorues[categoryIdx];
+    return category;
   }
 
 }

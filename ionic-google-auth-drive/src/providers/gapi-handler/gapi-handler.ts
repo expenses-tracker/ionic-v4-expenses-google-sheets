@@ -182,6 +182,27 @@ export class GapiHandlerProvider {
     });
   }
 
+  public updateDatatoSpreadSheet(spreadsheetId: string, range: string, body: Array<any>) {
+    return new Observable((subscriber) => {
+      gapi.client.sheets.spreadsheets.values.update({
+        spreadsheetId: spreadsheetId,
+        range: range,
+        valueInputOption: 'USER_ENTERED',
+        resource: {
+          range: range,
+          majorDimension: 'COLUMNS',
+          values: body
+        }
+     }).then((response) => {
+       console.log(response);
+       subscriber.next(response);
+     }).catch((err) => {
+       console.log(err);
+       subscriber.error(err);
+     });
+    });
+  }
+
   public getColumnBasedDataFromSpreadSheet(id: string, range: string) {
     return new Observable((subscriber) => {
       gapi.client.sheets.spreadsheets.values.get({

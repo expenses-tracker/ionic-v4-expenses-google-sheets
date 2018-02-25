@@ -42,5 +42,6 @@
       </ion-select>
     </ion-item>
   </ion-list>
-  <button ion-button block (click)="addExpense()">Add</button>
+  <button ion-button block (click)="addExpense()" *ngIf="!expenseIdx">Add</button>
+  <button ion-button block (click)="editExpense()" *ngIf="expenseIdx">Edit</button>
 </ion-content>
