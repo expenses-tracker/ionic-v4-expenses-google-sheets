@@ -8,6 +8,11 @@
 
   <ion-navbar>
     <ion-title>{{title}}</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only color="royal" (click)="addExpense()">
+            <ion-icon ios="ios-add-circle" md="md-add-circle"></ion-icon>
+        </button>
+      </ion-buttons>
   </ion-navbar>
   <ion-toolbar>
     <!-- Card displaying the aggregates of expenses in different category -->

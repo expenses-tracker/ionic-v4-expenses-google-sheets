@@ -1,6 +1,8 @@
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
+import { NewExpensePage } from './../new-expense/new-expense';
+import { Component, NgZone } from '@angular/core';
+import { IonicPage, NavController, NavParams, LoadingController, Loading, ModalController } from 'ionic-angular';
+import * as _ from 'lodash';
 
 /**
  * Generated class for the DetailPage page.
@@ -17,6 +19,7 @@ import { IonicPage, NavController, NavParams, LoadingController, Loading } from 
 export class DetailPage {
 
   title: string;
+  spreadsheetId: any;
   loader: Loading;
   spreadSheetData: any;
   aggregates: any;
@@ -30,13 +33,15 @@ export class DetailPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public loadingCtrl: LoadingController,
-    private gapiHandler: GapiHandlerProvider) {
+    private modalCtrl: ModalController,
+    private gapiHandler: GapiHandlerProvider,
+    private zone: NgZone) {
     this.presentLoading();
     this.loadData();
   }
 
   ionViewDidLoad() {
-    console.log(this.spreadSheetData);
+    // console.log(this.spreadSheetData);
     this.loader.dismiss();
   }
 
@@ -51,6 +56,7 @@ export class DetailPage {
   private loadData() {
     this.title = this.navParams.get('title');
     this.spreadSheetData = this.navParams.get('sheetData');
+    this.spreadsheetId = this.navParams.get('spreadsheetId');
     this.loadAggregates();
     this.loadExpenses();
   }
@@ -89,11 +95,39 @@ export class DetailPage {
     console.log('Edit expense' + JSON.stringify(expense));
   }
 
+  public addExpense() {
+    const expenses = this.spreadSheetData.data[0].rowData;
+    const detailModal = this.modalCtrl.create(NewExpensePage, {
+      'spreadsheetId': this.spreadsheetId,
+      'noOfExpenses': this.expensesList.length + 3,
+      'sheet': this.title
+    });
+    detailModal.onDidDismiss((data) => {
+      if(data) {
+        if(data.refresh) {
+          this.presentLoading();
+          this.zone.run(() => {
+            this.refreshData();
+          });
+        }
+      }
+    });
+    detailModal.present();
+  }
+
   doInfinite(infiniteScroll) {
     setTimeout(() => {
       this.loadExpenses();
       infiniteScroll.complete();
     }, 100);
+  }
+
+  private refreshData() {
+    this.gapiHandler.getSpreadSheetData(this.spreadsheetId).subscribe((data: any) => {
+      const spreadSheetData = data.result.sheets;
+      this.spreadSheetData = _.find(spreadSheetData, (o) => { return o.properties.title === this.title });
+      this.loader.dismiss();
+    });
   }
 
 }

@@ -1,3 +1,4 @@
+import { NewExpensePageModule } from './../new-expense/new-expense.module';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { DetailPage } from './detail';
@@ -8,6 +9,7 @@ import { DetailPage } from './detail';
   ],
   imports: [
     IonicPageModule.forChild(DetailPage),
+    NewExpensePageModule
   ],
 })
 export class DetailPageModule {}

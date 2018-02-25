@@ -1,0 +1,46 @@
+<!--
+  Generated template for the NewExpensePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Add Expense</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Date</ion-label>
+      <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="date"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Description</ion-label>
+      <ion-select [(ngModel)]="description">
+        <ion-option *ngFor="let desc of descriptions">{{desc}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Payment Type</ion-label>
+      <ion-select [(ngModel)]="paymentType">
+        <ion-option *ngFor="let pt of paymentTypes">{{pt}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Amount</ion-label>
+      <ion-input type="text" [(ngModel)]="amount"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Category</ion-label>
+      <ion-select [(ngModel)]="category">
+        <ion-option *ngFor="let pt of categories">{{pt}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <button ion-button block (click)="addExpense()">Add</button>
+</ion-content>

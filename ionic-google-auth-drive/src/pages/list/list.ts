@@ -26,6 +26,7 @@ export class ListPage {
   sheets: Array<{sheetId: string, title: string}> = [];
   title: string = 'Select file';
   spreadSheetData: any;
+  spreadSheetId: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private gapiHandler: GapiHandlerProvider,
@@ -35,15 +36,16 @@ export class ListPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ListPage');
+    // console.log('ionViewDidLoad ListPage');
   }
 
   public fileSelected(item) {
     this.selectedFile = item;
     this.presentLoading();
     this.gapiHandler.getSpreadSheetIdForExcel(item).subscribe((response: any) => {
-      console.log(response.id);
+      // console.log(response.id);
       this.gapiHandler.getSpreadSheetData(response.id).subscribe((data: any) => {
+        this.spreadSheetId = data.result.spreadsheetId;
         this.spreadSheetData = data.result.sheets;
         // console.log(this.spreadSheetData);
         this.loadSheets(this.spreadSheetData);
@@ -58,7 +60,8 @@ export class ListPage {
     sheetData = _.find(this.spreadSheetData, (o) => { return o.properties.title === this.selectedSheet });
     const detailModal = this.modalCtrl.create(DetailPage, {
       'title': this.selectedSheet,
-      'sheetData': sheetData
+      'sheetData': sheetData,
+      'spreadsheetId': this.spreadSheetId
     });
     detailModal.present();
   }

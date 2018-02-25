@@ -94,7 +94,7 @@ export class GapiHandlerProvider {
         fields: 'user'
         //oauth_token: this.userInfo.accessToken
       }).then((response) => {
-        console.log(response);
+        // console.log(response);
         subscriber.next(response);
       }, err => {
         console.log(err);
@@ -111,7 +111,7 @@ export class GapiHandlerProvider {
       gapi.client.drive.files.list({
         q: 'mimeType = \'application/vnd.google-apps.spreadsheet\''
       }).then((response) => {
-        console.log(response);
+        // console.log(response);
         subscriber.next(response);
       }).catch((err) => {
         console.log(err);
@@ -152,7 +152,43 @@ export class GapiHandlerProvider {
         spreadsheetId: id,
         includeGridData: true
       }).then((response) => {
-        console.log(response);
+        // console.log(response);
+        subscriber.next(response);
+      }).catch((err) => {
+        console.log(err);
+        subscriber.error(err);
+      })
+    });
+  }
+
+  public addDatatoSpreadSheet(spreadsheetId: string, range: string, body: Array<any>) {
+    return new Observable((subscriber) => {
+      gapi.client.sheets.spreadsheets.values.append({
+        spreadsheetId: spreadsheetId,
+        range: range,
+        valueInputOption: 'USER_ENTERED',
+        resource: {
+          range: range,
+          majorDimension: 'COLUMNS',
+          values: body
+        }
+     }).then((response) => {
+       console.log(response);
+       subscriber.next(response);
+     }).catch((err) => {
+       console.log(err);
+       subscriber.error(err);
+     });
+    });
+  }
+
+  public getColumnBasedDataFromSpreadSheet(id: string, range: string) {
+    return new Observable((subscriber) => {
+      gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: id,
+        range: range
+      }).then((response) => {
+        // console.log(response);
         subscriber.next(response);
       }).catch((err) => {
         console.log(err);
