@@ -62,10 +62,10 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
+      "cordova-sqlite-storage": {},
       "cordova-plugin-googleplus": {
         "REVERSED_CLIENT_ID": "com.googleusercontent.apps.1004371791417-sbargh3lbpqt1h9uket3es33pcfrie9d"
-      },
-      "cordova-sqlite-storage": {}
+      }
     }
   }
 }

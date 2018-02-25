@@ -47,7 +47,28 @@ export class GapiHandlerProvider {
         'offline': true
       })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
+          this.profile = res;
+          subscriber.next(res);
+        })
+        .catch((err) => {
+          console.error(err);
+          subscriber.error(err);
+        });
+    });
+  }
+
+  public trySilentLogin(scopes: string, clientId: string) {
+    this.clientScopes = scopes? scopes: gapiScopes;
+    this.clientId = clientId;
+    return new Observable((subscriber) => {
+      this.googlePlus.trySilentLogin({
+        'scopes': scopes? scopes : gapiScopes,
+        'webClientId': clientId,
+        'offline': true
+      })
+        .then((res) => {
+          // console.log(res);
           this.profile = res;
           subscriber.next(res);
         })

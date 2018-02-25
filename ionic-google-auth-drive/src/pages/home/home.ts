@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs/observable';
+import { StorageHandlerProvider } from './../../providers/storage-handler/storage-handler';
 import { ListPage } from './../list/list';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
 import { Component } from '@angular/core';
@@ -17,11 +19,48 @@ export class HomePage {
     public modalCtrl: ModalController,
     private gapiHandler: GapiHandlerProvider,
     private plt: Platform,
+    private storage: StorageHandlerProvider,
     public loadingCtrl: LoadingController) {
-      this.plt.ready().then(() => {
-        this.presentLoading();
-        this.signInWithGoogle();
+  }
+
+  ionViewWillEnter(){
+    this.plt.ready().then(() => {
+      this.presentLoading();
+      this.loadProfile();
+    });
+  }
+
+  private loadProfile() {
+    // this.isProfileAvailable().subscribe((resp) => {
+    //   console.log('Trying silent login');
+    //   this.gapiHandler.trySilentLogin(null,
+    //     '1004371791417-1fqtb5uppq99qdesjk85gonrfu24c9oi.apps.googleusercontent.com')
+    //     .subscribe((resp) => {
+    //       this.loadProfileNLibs(resp);
+    //     }, (err) => {
+    //       console.log('Failure in silent login');
+    //       this.signInWithGoogle();
+    //     });
+    // }, (err) => {
+    //   console.log('No user information found. Fresh login');
+      this.signInWithGoogle();
+    // });
+  }
+
+  private isProfileAvailable() {
+    return new Observable((subscriber) => {
+      this.storage.get('expenseUser').then((profile) => {
+        console.log('LocalStorage get');
+        // console.log(profile);
+        if(profile != null) {
+          subscriber.next(true);
+        } else {
+          subscriber.error(false);
+        }
+      }).catch((err) => {
+        subscriber.error(false);
       });
+    });
   }
 
   /**
@@ -32,17 +71,28 @@ export class HomePage {
       null,
       '1004371791417-1fqtb5uppq99qdesjk85gonrfu24c9oi.apps.googleusercontent.com')
       .subscribe((res) => {
-        this.presentLoading();
-        console.log(res);
-        this.gapiHandler.loadGapiClientLibraries().subscribe(() => {
-          console.log('Google client libs loaded successfully');
-          this.loader.dismissAll();
-          this.presentProfileInfo(res);
-        });
+        this.loadProfileNLibs(res);
       },(err) => {
         console.error(err);
         this.showSignInError();
       });
+  }
+
+  public loadProfileNLibs(res) {
+    this.presentLoading();
+        this.storage.set('expenseUser', res).then((data: any) => {
+          console.log('Profile stored successfully for later use');
+        }).catch(err => {
+          console.log('Unable to profile info in storgae. Error: ' + JSON.stringify(err));
+        });
+        // console.log(res);
+        this.gapiHandler.loadGapiClientLibraries().subscribe(() => {
+          console.log('Google client libs loaded successfully');
+          this.loader.dismissAll();
+          this.presentProfileInfo(res);
+        }, (err) => {
+          this.showSignInError();
+        });
   }
 
   presentProfileInfo(profile: any) {
@@ -59,7 +109,12 @@ export class HomePage {
     let alert = this.alertCtrl.create({
       title: 'Error',
       subTitle: 'Unable to sign in through Google. Please try again.',
-      buttons: ['OK']
+      buttons: [{
+        text: 'Retry',
+        handler: () => {
+          this.loadProfile();
+        }
+      }]
     });
     alert.present();
   }

@@ -81,9 +81,9 @@
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
+    <plugin name="cordova-sqlite-storage" spec="~2.2.1" />
     <plugin name="cordova-plugin-googleplus" spec="^5.2.1">
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.1004371791417-sbargh3lbpqt1h9uket3es33pcfrie9d" />
     </plugin>
-    <plugin name="cordova-sqlite-storage" spec="~2.2.1" />
     <engine name="android" spec="7.0.0" />
 </widget>
