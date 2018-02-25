@@ -102,7 +102,7 @@ export class NewExpensePage {
     });
     // set the index of category object to update in body array
     const replaceIdx = 4 + categoryIdx;
-    console.log('Replace index: ' + replaceIdx);
+    // console.log('Replace index: ' + replaceIdx);
     // Replace null with user entered amount for category
     body[replaceIdx] = [this.amount];
   

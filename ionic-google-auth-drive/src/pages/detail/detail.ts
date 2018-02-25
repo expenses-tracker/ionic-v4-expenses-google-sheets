@@ -1,7 +1,7 @@
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
 import { NewExpensePage } from './../new-expense/new-expense';
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading, ModalController, AlertController } from 'ionic-angular';
 import * as _ from 'lodash';
 
 /**
@@ -35,6 +35,7 @@ export class DetailPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public loadingCtrl: LoadingController,
     private modalCtrl: ModalController,
+    public alertCtrl: AlertController,
     private gapiHandler: GapiHandlerProvider,
     private zone: NgZone) {
     this.presentLoading();
@@ -130,6 +131,30 @@ export class DetailPage {
       }
     });
     detailModal.present();
+  }
+
+  public deleteExpense(expense) {
+    this.presentLoading();
+    const range: string = this.title + '!A' + (expense.id + 1) + ':J' + (expense.id + 1);
+    this.gapiHandler.deleteDataInSpreadSheet(this.spreadsheetId, range).subscribe((data: any) => {
+       this.refreshData();
+    }, (err) => {
+      this.showError(err);
+    });
+  }
+
+  /**
+   * Display error
+   */
+  showError(error: any) {
+    const msg = error.result.error.message;
+    const title = error.result.error.status;
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: msg,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
   private refreshData() {

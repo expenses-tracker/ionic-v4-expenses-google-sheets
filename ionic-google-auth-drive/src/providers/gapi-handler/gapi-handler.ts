@@ -203,6 +203,22 @@ export class GapiHandlerProvider {
     });
   }
 
+  public deleteDataInSpreadSheet(spreadsheetId: string, range: string) {
+    return new Observable((subscriber) => {
+      gapi.client.sheets.spreadsheets.values.clear({
+        spreadsheetId: spreadsheetId,
+        range: range,
+        resource: {}
+     }).then((response) => {
+       console.log(response);
+       subscriber.next(response);
+     }).catch((err) => {
+       console.log(err);
+       subscriber.error(err);
+     });
+    });
+  }
+
   public getColumnBasedDataFromSpreadSheet(id: string, range: string) {
     return new Observable((subscriber) => {
       gapi.client.sheets.spreadsheets.values.get({

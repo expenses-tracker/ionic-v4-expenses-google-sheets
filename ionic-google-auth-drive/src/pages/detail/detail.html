@@ -56,26 +56,31 @@
 <ion-content padding>
   <!-- List of expenses -->
   <ion-list>
-    <ion-item *ngFor="let expense of expensesList" (click)="editExpense(expense)">
-        <ion-grid>
-            <ion-row>
-              <ion-col col-9 style="white-space:normal; font-weight:500;">
-                <b>{{expense.description}}</b>
-              </ion-col>
-              <ion-col col-3 style="text-align:right; color:brown">
-                Rs {{expense.amount}}
-              </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col col-8 style="white-space:normal; color: darkturquoise;">
-                  {{expense.paymentType}}
-                </ion-col>
-                <ion-col col-4 style="text-align:right; color: slategrey;">
-                  {{expense.date}}
-                </ion-col>
-              </ion-row>
-        </ion-grid>
-    </ion-item>
+    <ion-item-sliding *ngFor="let expense of expensesList">
+        <ion-item (click)="editExpense(expense)">
+            <ion-grid>
+                <ion-row>
+                  <ion-col col-9 style="white-space:normal; font-weight:500;">
+                    <b>{{expense.description}}</b>
+                  </ion-col>
+                  <ion-col col-3 style="text-align:right; color:brown">
+                    Rs {{expense.amount}}
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col col-8 style="white-space:normal; color: darkturquoise;">
+                      {{expense.paymentType}}
+                    </ion-col>
+                    <ion-col col-4 style="text-align:right; color: slategrey;">
+                      {{expense.date}}
+                    </ion-col>
+                  </ion-row>
+            </ion-grid>
+        </ion-item>
+        <ion-item-options side="right">
+            <button ion-button (click)="deleteExpense(expense)">Delete</button>
+          </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
   <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
