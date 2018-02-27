@@ -1,3 +1,4 @@
+import { LoginDetailPage } from './../login-detail/login-detail';
 import { Observable } from 'rxjs/observable';
 import { StorageHandlerProvider } from './../../providers/storage-handler/storage-handler';
 import { ListPage } from './../list/list';
@@ -134,7 +135,16 @@ export class HomePage {
 
   public fileSelected(item) {
     this.selectedFile = item;
-    this.loadSheets();
+    if(this.selectedFile === 'Logins') {
+      this.loadLoginDetail();
+    } else {
+      this.loadSheets();
+    }
+  }
+
+  public loadLoginDetail() {
+    let modal = this.modalCtrl.create(LoginDetailPage);
+    modal.present();
   }
 
 }

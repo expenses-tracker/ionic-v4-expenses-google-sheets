@@ -1,0 +1,41 @@
+<!--
+  Generated template for the NewLoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Add Login Detail</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+    <ion-list>
+        <ion-item>
+          <ion-label floating>Site</ion-label>
+          <ion-input type="text" [(ngModel)]="site"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Url</ion-label>
+          <ion-input type="text" [(ngModel)]="url"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Username</ion-label>
+          <ion-input type="text" [(ngModel)]="username"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Password</ion-label>
+          <ion-input type="text" [(ngModel)]="password"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Security Questions</ion-label>
+          <ion-input type="text" [(ngModel)]="securityQues"></ion-input>
+        </ion-item>
+      </ion-list>
+      <button ion-button (click)="addLogin()" *ngIf="!loginIdx">Add</button>
+      <button ion-button (click)="editLogin()" *ngIf="loginIdx">Edit</button>
+</ion-content>

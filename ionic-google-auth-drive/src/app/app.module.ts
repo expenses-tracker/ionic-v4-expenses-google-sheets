@@ -1,3 +1,4 @@
+import { LoginDetailPageModule } from './../pages/login-detail/login-detail.module';
 import { ListPageModule } from './../pages/list/list.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -23,7 +24,8 @@ import { StorageHandlerProvider } from '../providers/storage-handler/storage-han
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     ProfilePageModule,
-    ListPageModule
+    ListPageModule,
+    LoginDetailPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -1,0 +1,51 @@
+<!--
+  Generated template for the LoginDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Logins</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only color="royal" (click)="addLogin()">
+          <ion-icon ios="ios-add-circle" md="md-add-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let login of loginData">
+        <ion-item (click)="editLogin(login)">
+            <ion-grid>
+                <ion-row>
+                  <ion-col style="white-space:normal; font-weight:500;">
+                    <b>{{login.site}}</b>
+                  </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col style="white-space:normal; color:brown">
+                      {{login.url}}
+                    </ion-col>
+                  </ion-row>
+                <ion-row>
+                    <ion-col col-7 style="white-space:normal; color: darkturquoise;">
+                      {{login.username}}
+                    </ion-col>
+                    <ion-col col-5 style="text-align:right; color: slategrey;">
+                      {{login.password}}
+                    </ion-col>
+                  </ion-row>
+            </ion-grid>
+        </ion-item>
+        <ion-item-options side="right">
+            <button ion-button (click)="deleteLogin(login)">Delete</button>
+          </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
