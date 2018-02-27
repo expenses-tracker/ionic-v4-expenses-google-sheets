@@ -17,8 +17,7 @@ import * as _ from 'lodash';
   templateUrl: 'list.html',
 })
 export class ListPage {
-
-  files = ['Expense tracker - 2018', 'Logins'];
+  
   loader: Loading;
   selectedFile: string;
   selectedSheet: string;
@@ -33,14 +32,16 @@ export class ListPage {
     public loadingCtrl: LoadingController,
     private modalCtrl: ModalController,
     private zone: NgZone) {
+      this.selectedFile = this.navParams.get('fileName');
+      this.fileSelected(this.selectedFile);
   }
 
   ionViewDidLoad() {
     // console.log('ionViewDidLoad ListPage');
+    
   }
 
   public fileSelected(item) {
-    this.selectedFile = item;
     this.presentLoading();
     this.gapiHandler.getSpreadSheetIdForExcel(item).subscribe((response: any) => {
       // console.log(response.id);

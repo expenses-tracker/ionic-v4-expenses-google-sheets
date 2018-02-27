@@ -65,21 +65,37 @@ export class DetailPage {
 
   private loadAggregates() {
     const data = this.spreadSheetData.data[0].rowData[2].values;
+    // console.info('loadAggregates');
+    // console.debug(data);
     this.aggregates = {
-      expenses: data[3].effectiveValue.numberValue,
-      household: data[4].effectiveValue.numberValue,
-      travel: data[5].effectiveValue.numberValue,
-      bills: data[6].effectiveValue.numberValue,
-      outsideFoods: data[7].effectiveValue.numberValue,
-      shopping: data[8].effectiveValue.numberValue,
-      others: data[9].effectiveValue.numberValue
+      expenses: data[3].formattedValue,
+      household: data[4].formattedValue,
+      travel: data[5].formattedValue,
+      bills: data[6].formattedValue,
+      outsideFoods: data[7].formattedValue,
+      shopping: data[8].formattedValue,
     };
+    // Sheet where shopping column didn't exist
+    if (data && data.length === 9) {
+      this.aggregates.shopping = 0;
+      this.aggregates.others = data[8].formattedValue;
+    }
+    // Sheet with both shopping and others
+    if (data && data.length > 9) {
+      this.aggregates.others = data[9].formattedValue;
+    }
   }
 
   private loadExpenses() {
     this.expensesList = [];
     const data = this.spreadSheetData.data[0].rowData;
-    for (let index = (data.length - 1); index > 2; index--) {
+    // console.info('loadExpenses');
+    // console.debug(this.spreadSheetData);
+    let dataCount = data.length -1;
+    if(dataCount > 100) {
+      dataCount = 100;
+    }
+    for (let index = dataCount; index > 2; index--) {
       const element = data[index].values;
       if (element.length > 3) {
         this.expensesList.push({

@@ -14,11 +14,6 @@
 
 
 <ion-content padding>
-  <ion-list *ngIf="loadFiles">
-    <button ion-item *ngFor="let item of files" (click)="fileSelected(item)">
-      {{ item }}
-    </button>  
-  </ion-list>
   <ion-list *ngIf="!loadFiles">
     <button ion-item *ngFor="let item of sheets" (click)="sheetSelected(item)">
       {{ item.title }}

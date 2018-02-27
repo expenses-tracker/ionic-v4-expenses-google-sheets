@@ -12,6 +12,10 @@ import { NavController, AlertController, ModalController, Platform, LoadingContr
 export class HomePage {
 
   loader: Loading;
+  files = ['Expense tracker - 2018', 'Expense tracker - 2017', 'Logins'];
+  loadFiles: boolean = false;
+  title: string = 'Select file';
+  selectedFile: string;
 
   constructor(
     public navCtrl: NavController,
@@ -89,15 +93,16 @@ export class HomePage {
         this.gapiHandler.loadGapiClientLibraries().subscribe(() => {
           console.log('Google client libs loaded successfully');
           this.loader.dismissAll();
-          this.presentProfileInfo(res);
+          // this.presentProfileInfo(res);
+          this.loadFiles = true;
         }, (err) => {
           this.showSignInError();
         });
   }
 
-  presentProfileInfo(profile: any) {
+  loadSheets() {
     let modal = this.modalCtrl.create(ListPage, {
-      profile: profile
+      fileName: this.selectedFile
     });
     modal.present();
   }
@@ -125,6 +130,11 @@ export class HomePage {
       duration: 3000
     });
     this.loader.present();
+  }
+
+  public fileSelected(item) {
+    this.selectedFile = item;
+    this.loadSheets();
   }
 
 }
