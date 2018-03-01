@@ -44,7 +44,7 @@ export class GapiHandlerProvider {
       this.googlePlus.login({
         'scopes': scopes? scopes : gapiScopes,
         'webClientId': clientId,
-        'offline': true
+        'offline': false
       })
         .then((res) => {
           // console.log(res);
@@ -65,7 +65,7 @@ export class GapiHandlerProvider {
       this.googlePlus.trySilentLogin({
         'scopes': scopes? scopes : gapiScopes,
         'webClientId': clientId,
-        'offline': true
+        'offline': false
       })
         .then((res) => {
           // console.log(res);
@@ -150,6 +150,7 @@ export class GapiHandlerProvider {
       gapi.client.drive.files.list({
         q: 'name = \'' + excelName + '\''
       }).then((response) => {
+        console.log(response);
         const files = response.result.files;
         if(files.length > 0) {
           subscriber.next(files[0]);
@@ -182,7 +183,7 @@ export class GapiHandlerProvider {
     });
   }
 
-  public addDatatoSpreadSheet(spreadsheetId: string, range: string, body: Array<any>) {
+  public addRowDatatoSpreadSheet(spreadsheetId: string, range: string, body: Array<any>) {
     return new Observable((subscriber) => {
       gapi.client.sheets.spreadsheets.values.append({
         spreadsheetId: spreadsheetId,
@@ -203,7 +204,7 @@ export class GapiHandlerProvider {
     });
   }
 
-  public updateDatatoSpreadSheet(spreadsheetId: string, range: string, body: Array<any>) {
+  public updateRowDatatoSpreadSheet(spreadsheetId: string, range: string, body: Array<any>) {
     return new Observable((subscriber) => {
       gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: spreadsheetId,

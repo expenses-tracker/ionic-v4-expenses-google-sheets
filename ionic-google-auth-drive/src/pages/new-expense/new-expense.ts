@@ -109,7 +109,7 @@ export class NewExpensePage {
   
     // Set the range for update
     const range: string = this.navParams.get('sheet') + '!A' + (this.noOfExpenses + 1) + ':J' + (this.noOfExpenses + 1);
-    this.gapiHandler.addDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
+    this.gapiHandler.addRowDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
       // console.log(data);
       this.loader.dismiss();
       this.viewCtrl.dismiss({refresh: true});
@@ -140,7 +140,7 @@ export class NewExpensePage {
     this.expenseIdx = this.expenseIdx + 1;
     // Set the range for update
     const range: string = this.navParams.get('sheet') + '!A' + this.expenseIdx + ':J' + this.expenseIdx;
-    this.gapiHandler.updateDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
+    this.gapiHandler.updateRowDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
       // console.log(data);
       this.loader.dismiss();
       this.viewCtrl.dismiss({refresh: true});

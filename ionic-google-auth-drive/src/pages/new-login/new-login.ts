@@ -66,7 +66,7 @@ export class NewLoginPage {
   
     // Set the range for update
     const range: string = this.navParams.get('sheet') + '!A' + (this.noOfLogins + 1) + ':E' + (this.noOfLogins + 1);
-    this.gapiHandler.addDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
+    this.gapiHandler.addRowDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
       // console.log(data);
       this.loader.dismiss();
       this.viewCtrl.dismiss({refresh: true});
@@ -88,7 +88,7 @@ export class NewLoginPage {
     this.loginIdx = this.loginIdx + 1;
     // Set the range for update
     const range: string = this.navParams.get('sheet') + '!A' + this.loginIdx + ':E' + this.loginIdx;
-    this.gapiHandler.updateDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
+    this.gapiHandler.updateRowDatatoSpreadSheet(this.spreadsheetId, range, body).subscribe((data: any) => {
       // console.log(data);
       this.loader.dismiss();
       this.viewCtrl.dismiss({refresh: true});

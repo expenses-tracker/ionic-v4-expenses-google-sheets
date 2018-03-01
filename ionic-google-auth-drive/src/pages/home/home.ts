@@ -36,27 +36,27 @@ export class HomePage {
   }
 
   private loadProfile() {
-    // this.isProfileAvailable().subscribe((resp) => {
-    //   console.log('Trying silent login');
-    //   this.gapiHandler.trySilentLogin(null,
-    //     '1004371791417-1fqtb5uppq99qdesjk85gonrfu24c9oi.apps.googleusercontent.com')
-    //     .subscribe((resp) => {
-    //       this.loadProfileNLibs(resp);
-    //     }, (err) => {
-    //       console.log('Failure in silent login');
-    //       this.signInWithGoogle();
-    //     });
-    // }, (err) => {
-    //   console.log('No user information found. Fresh login');
+    this.isProfileAvailable().subscribe((resp) => {
+      console.log('Trying silent login');
+      this.gapiHandler.trySilentLogin(null,
+        '1004371791417-1fqtb5uppq99qdesjk85gonrfu24c9oi.apps.googleusercontent.com')
+        .subscribe((resp) => {
+          this.loadProfileNLibs(resp);
+        }, (err) => {
+          console.log('Failure in silent login');
+          this.signInWithGoogle();
+        });
+    }, (err) => {
+      console.log('No user information found. Fresh login');
       this.signInWithGoogle();
-    // });
+    });
   }
 
   private isProfileAvailable() {
     return new Observable((subscriber) => {
       this.storage.get('expenseUser').then((profile) => {
         console.log('LocalStorage get');
-        // console.log(profile);
+        console.log(profile);
         if(profile != null) {
           subscriber.next(true);
         } else {
