@@ -13,7 +13,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content padding>
     <ion-list>
         <ion-item>
           <ion-label floating>Site</ion-label>
@@ -36,6 +36,6 @@
           <ion-input type="text" [(ngModel)]="securityQues"></ion-input>
         </ion-item>
       </ion-list>
-      <button ion-button (click)="addLogin()" *ngIf="!loginIdx">Add</button>
-      <button ion-button (click)="editLogin()" *ngIf="loginIdx">Edit</button>
+      <button ion-button block (click)="addLogin()" *ngIf="!loginIdx">Add</button>
+      <button ion-button block (click)="editLogin()" *ngIf="loginIdx">Edit</button>
 </ion-content>

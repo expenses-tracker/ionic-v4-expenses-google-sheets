@@ -28,6 +28,7 @@ export class NewExpensePage {
   amount: number;
   category: string;
   expenseIdx: number;
+  otherAmount: number;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private gapiHandler: GapiHandlerProvider,
@@ -94,7 +95,7 @@ export class NewExpensePage {
       [this.description],
       [this.paymentType],
       [this.amount],
-      [''], [''], [''], [''], [''], ['']];
+      [''], [''], [''], [''], [''], [''], [this.otherAmount]];
 
     // Find index of selected category from categories list
     const categoryIdx = _.findIndex(this.categories, (o) => {
@@ -125,7 +126,7 @@ export class NewExpensePage {
       [this.description],
       [this.paymentType],
       [this.amount],
-      [''], [''], [''], [''], [''], ['']];
+      [''], [''], [''], [''], [''], [''], [this.otherAmount]];
 
     // Find index of selected category from categories list
     const categoryIdx = _.findIndex(this.categories, (o) => {

@@ -26,20 +26,36 @@
       </ion-select>
     </ion-item>
     <ion-item>
+      <ion-label floating>Description (Other)</ion-label>
+      <ion-input type="text" [(ngModel)]="description"></ion-input>
+    </ion-item>
+    <ion-item>
       <ion-label floating>Payment Type</ion-label>
       <ion-select [(ngModel)]="paymentType">
         <ion-option *ngFor="let pt of paymentTypes">{{pt}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
+      <ion-label floating>Payment Type (Other)</ion-label>
+      <ion-input type="text" [(ngModel)]="paymentType"></ion-input>
+    </ion-item>
+    <ion-item>
       <ion-label floating>Amount</ion-label>
-      <ion-input type="text" [(ngModel)]="amount"></ion-input>
+      <ion-input type="number" [(ngModel)]="amount"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Amount (Other)</ion-label>
+      <ion-input type="number" [(ngModel)]="otherAmount"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>Category</ion-label>
       <ion-select [(ngModel)]="category">
         <ion-option *ngFor="let pt of categories">{{pt}}</ion-option>
       </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Category (Other)</ion-label>
+      <ion-input type="text" [(ngModel)]="category"></ion-input>
     </ion-item>
   </ion-list>
   <button ion-button block (click)="addExpense()" *ngIf="!expenseIdx">Add</button>

@@ -151,7 +151,7 @@ export class DetailPage {
 
   public deleteExpense(expense) {
     this.presentLoading();
-    const range: string = this.title + '!A' + (expense.id + 1) + ':J' + (expense.id + 1);
+    const range: string = this.title + '!A' + (expense.id + 1) + ':K' + (expense.id + 1);
     this.gapiHandler.deleteDataInSpreadSheet(this.spreadsheetId, range).subscribe((data: any) => {
        this.refreshData();
     }, (err) => {
