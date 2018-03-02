@@ -1,0 +1,23 @@
+<ion-header>
+  <!-- <ion-navbar>
+    <ion-title>
+      Ionic Google Auth
+    </ion-title>
+  </ion-navbar> -->
+</ion-header>
+
+<ion-content>
+  <!-- To Demonstrate Google authentication and Drive & Sheets REST APIs integration in Ionic app.
+    
+  <button ion-button block (click)="signInWithGoogle()">Google Sign In</button> -->
+  <ion-toolbar *ngIf="loadFiles">
+    <ion-title>
+      {{title}}
+    </ion-title>
+  </ion-toolbar>
+  <ion-list *ngIf="loadFiles">
+    <button ion-item *ngFor="let item of files" (click)="fileSelected(item)">
+      {{ item }}
+    </button>  
+  </ion-list>
+</ion-content>
