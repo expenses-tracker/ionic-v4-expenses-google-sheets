@@ -24,6 +24,7 @@ export class NewLoginPage {
   loader: Loading;
   spreadsheetId: string;
   noOfLogins: number;
+  public title: string = 'Add Login Detail';
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private gapiHandler: GapiHandlerProvider,
@@ -35,6 +36,7 @@ export class NewLoginPage {
     // console.log('SpreadSheetId to search: '+ this.spreadsheetId);
     this.noOfLogins = this.navParams.get('noOfLogins');
     if (this.navParams.get('edit')) {
+      this.title = 'Edit Login Detail';
       // console.log(this.navParams.get('expenseData'));
       const login = this.navParams.get('loginData');
       this.site = login.site;
@@ -53,6 +55,10 @@ export class NewLoginPage {
 
   ionViewWillUnload(){
    this.loginIdx = undefined;
+  }
+
+  cancel() {
+    this.viewCtrl.dismiss();
   }
 
   public addLogin() {

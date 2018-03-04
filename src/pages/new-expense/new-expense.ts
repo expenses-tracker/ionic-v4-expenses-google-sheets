@@ -29,6 +29,7 @@ export class NewExpensePage {
   category: string;
   expenseIdx: number;
   otherAmount: number;
+  public title: string = 'Add Expense';
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private gapiHandler: GapiHandlerProvider,
@@ -40,6 +41,7 @@ export class NewExpensePage {
     // console.log('SpreadSheetId to search: '+ this.spreadsheetId);
     this.noOfExpenses = this.navParams.get('noOfExpenses');
     if (this.navParams.get('edit')) {
+      this.title = 'Edit Expense';
       // console.log(this.navParams.get('expenseData'));
       const expense = this.navParams.get('expenseData');
       this.date = expense.date;
@@ -58,6 +60,10 @@ export class NewExpensePage {
 
   ionViewWillUnload(){
    this.expenseIdx = undefined;
+  }
+
+  cancel() {
+    this.viewCtrl.dismiss();
   }
 
   private getPaymentTypes() {

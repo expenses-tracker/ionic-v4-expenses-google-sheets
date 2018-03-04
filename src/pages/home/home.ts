@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/observable';
 import { StorageHandlerProvider } from './../../providers/storage-handler/storage-handler';
 import { ListPage } from './../list/list';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, AlertController, ModalController, Platform, LoadingController, Loading } from 'ionic-angular';
 
 @Component({
@@ -25,13 +25,35 @@ export class HomePage {
     private gapiHandler: GapiHandlerProvider,
     private plt: Platform,
     private storage: StorageHandlerProvider,
-    public loadingCtrl: LoadingController) {
+    public loadingCtrl: LoadingController,
+    private zone: NgZone) {
   }
 
   ionViewWillEnter(){
     this.plt.ready().then(() => {
       this.presentLoading();
-      this.loadProfile();
+      if (this.plt.is('cordova')) {
+        this.loadProfile();
+      } else {
+        setTimeout(() => {
+          this.gapiHandler.loadClientLibs(
+            null,
+            '1004371791417-6m5ogkjeibmkl6oi6ptgb9ki47v6hecg.apps.googleusercontent.com'
+          ).subscribe(() => {
+            console.log('Authentication complete');
+            console.log('Google client lib loaded successfully');
+            setTimeout(() => {
+              this.gapiHandler.loadDriveNSheetsLibs().subscribe(() => {
+                this.loader.dismissAll();
+                // this.presentProfileInfo(res);
+                this.zone.run(() => {
+                  this.loadFiles = true;
+                });
+              });
+            }, 1000);
+          });
+        }, 1000);
+      }
     });
   }
 
@@ -102,10 +124,13 @@ export class HomePage {
   }
 
   loadSheets() {
-    let modal = this.modalCtrl.create(ListPage, {
+    // let modal = this.modalCtrl.create(ListPage, {
+    //   fileName: this.selectedFile
+    // });
+    // modal.present();
+    this.navCtrl.push(ListPage, {
       fileName: this.selectedFile
     });
-    modal.present();
   }
 
   /**

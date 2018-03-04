@@ -32,6 +32,76 @@ export class GapiHandlerProvider {
     this.clientScopes = scopes;
   }
 
+  public loadClientLibs(scopes: string, clientId: string) {
+    return new Observable((subscriber) => {
+      this.clientScopes = scopes? scopes: gapiScopes;
+    this.clientId = clientId;
+    // Loads the client library and the auth2 library together for efficiency.
+    // Loading the auth2 library is optional here since `gapi.client.init` function will load
+    // it if not already loaded. Loading it upfront can save one network request.
+    gapi.load('client', () => {
+      // Initialize the client with API key and People API, and initialize OAuth with an
+      // OAuth 2.0 client ID and scopes (space delimited string) to request access.
+      Promise.resolve(gapi.client.init({
+        apiKey: 'AIzaSyAJXWPetW--3-6kY0I7kaJJp4Ex7wAE1KU',
+        discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest", "https://sheets.googleapis.com/$discovery/rest?version=v4"],
+        clientId: this.clientId,
+        scope: this.clientScopes
+      })).then(function () {
+        // Listen for sign-in state changes.
+        // gapi.auth2.getAuthInstance().signIn();
+        Promise.resolve(gapi.auth2.getAuthInstance().signIn()).then(() => {
+          const signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
+          const authResp = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse(true);
+          if (signedIn && authResp) {
+            console.log(authResp);
+            subscriber.next();
+            // subscriber.next(authResp);
+          } else {
+            subscriber.error();
+          }
+        }).catch((err) => {
+          subscriber.error(err);
+        });
+        // gapi.auth2.getAuthInstance().isSignedIn.listen(() => {
+        //   const signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
+        //   const authResp = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse(true);
+        //   if (signedIn && authResp) {
+        //     console.log(authResp);
+        //     subscriber.next();
+        //     // subscriber.next(authResp);
+        //   } else {
+        //     subscriber.error();
+        //   }
+        // });
+      });
+    });
+    });
+  }
+
+  public webSignIn() {
+    // Ideally the button should only show up after gapi.client.init finishes, so that this
+    // handler won't be called before OAuth is initialized.
+    gapi.auth2.getAuthInstance().signIn();
+  }
+
+  public loadDriveNSheetsLibs() {
+    return new Observable((subscriber) => {
+      gapi.client.load('drive', 'v3').then(() => {
+        console.log('drive is available now');
+        // console.log(gapi.client.getToken());
+        gapi.client.load('sheets', 'v4').then(() => {
+          console.log('drive is available now');
+          subscriber.next();
+        }).catch((err) => {
+          subscriber.error(err);
+        });
+      }).catch((err) => {
+        subscriber.error(err);
+      });
+    });
+  }
+
   /**
    * Initiate Google sign in flow for app
    * @param scopes Scopes for google apis
