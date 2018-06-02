@@ -92,9 +92,9 @@ export class DetailPage {
     // console.info('loadExpenses');
     // console.debug(this.spreadSheetData);
     let dataCount = data.length -1;
-    if(dataCount > 100) {
-      dataCount = 100;
-    }
+    // if(dataCount > 100) {
+    //   dataCount = 100;
+    // }
     for (let index = dataCount; index > 2; index--) {
       const element = data[index].values;
       if (element.length > 3) {

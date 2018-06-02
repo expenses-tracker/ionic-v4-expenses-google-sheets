@@ -31,7 +31,7 @@
     "@types/gapi.client.drive": "^3.0.0",
     "@types/gapi.client.sheets": "^4.0.0",
     "@types/lodash": "^4.14.104",
-    "cordova-android": "7.0.0",
+    "cordova-android": "^7.0.0",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-googleplus": "^5.2.3",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
