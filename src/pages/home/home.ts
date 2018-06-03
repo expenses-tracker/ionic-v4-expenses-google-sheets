@@ -168,8 +168,9 @@ export class HomePage {
   }
 
   public loadLoginDetail() {
-    let modal = this.modalCtrl.create(LoginDetailPage);
-    modal.present();
+    // let modal = this.modalCtrl.create(LoginDetailPage);
+    // modal.present();
+    this.navCtrl.push(LoginDetailPage);
   }
 
 }

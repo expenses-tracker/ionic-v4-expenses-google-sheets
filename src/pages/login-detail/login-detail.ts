@@ -1,6 +1,6 @@
 import { NewLoginPage } from './../new-login/new-login';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController, AlertController, ModalController } from 'ionic-angular';
 
 /**
@@ -21,12 +21,14 @@ export class LoginDetailPage {
   spreadSheetId: any;
   labels: any;
   loginData = [];
+  filterLoginData = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private gapiHandler: GapiHandlerProvider,
     public loadingCtrl: LoadingController,
     private modalCtrl: ModalController,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public zone: NgZone) {
       this.loadDetail();
   }
 
@@ -70,6 +72,7 @@ export class LoginDetailPage {
 
   loadLogins() {
     this.loginData = [];
+    this.filterLoginData = [];
     const data = this.spreadSheetData[0].data[0].rowData;
     for (let index = 1; index < data.length; index++) {
       const element = data[index].values;
@@ -86,7 +89,8 @@ export class LoginDetailPage {
           if (element.length > 4) {
             obj.securityQues = element[4].formattedValue;
           } 
-          this.loginData.push(obj); 
+          this.loginData.push(obj);
+          this.filterLoginData.push(obj); 
         }
       }
     }
@@ -153,6 +157,23 @@ export class LoginDetailPage {
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  getItems(ev: any) {
+    // Reset items back to all of the items
+    this.filterLoginData = this.loginData;
+
+    // set val to the value of the searchbar
+    let val = ev.target.value;
+    // console.log('value enterd: ' + val);
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.filterLoginData = this.filterLoginData.filter((item) => {
+        return (item.site && item.site.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      });
+      console.log(this.filterLoginData);
+    }
   }
 
 }
