@@ -35,26 +35,29 @@ export class HomePage {
       if (this.plt.is('cordova')) {
         this.loadProfile();
       } else {
-        setTimeout(() => {
-          this.gapiHandler.loadClientLibs(
-            null,
-            '1004371791417-6m5ogkjeibmkl6oi6ptgb9ki47v6hecg.apps.googleusercontent.com'
-          ).subscribe(() => {
-            console.log('Authentication complete');
-            console.log('Google client lib loaded successfully');
-            setTimeout(() => {
-              this.gapiHandler.loadDriveNSheetsLibs().subscribe(() => {
-                this.loader.dismissAll();
-                // this.presentProfileInfo(res);
-                this.zone.run(() => {
-                  this.loadFiles = true;
-                });
-              });
-            }, 1000);
-          });
-        }, 1000);
+        this.loadBrowserLibsNUserInfo();
       }
     });
+  }
+
+  private loadBrowserLibsNUserInfo() {
+    setTimeout(() => {
+      this.gapiHandler.loadClientLibs(
+        null,
+        '1004371791417-6m5ogkjeibmkl6oi6ptgb9ki47v6hecg.apps.googleusercontent.com'
+      ).subscribe(() => {
+        console.log('Libs loaded and user authentication complete');
+        setTimeout(() => {
+          this.gapiHandler.loadDriveNSheetsLibs().subscribe(() => {
+            this.loader.dismissAll();
+            // this.presentProfileInfo(res);
+            this.zone.run(() => {
+              this.loadFiles = true;
+            });
+          });
+        }, 1000);
+      });
+    }, 1000);
   }
 
   private loadProfile() {
