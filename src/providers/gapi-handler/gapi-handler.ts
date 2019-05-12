@@ -21,7 +21,7 @@ export class GapiHandlerProvider {
 
   constructor(
     private googlePlus: GooglePlus) {
-    console.log('Hello GapiHandlerProvider Provider');
+    // console.log('Hello GapiHandlerProvider Provider');
   }
 
   /**
@@ -51,10 +51,13 @@ export class GapiHandlerProvider {
         // Listen for sign-in state changes.
         // gapi.auth2.getAuthInstance().signIn();
         Promise.resolve(gapi.auth2.getAuthInstance().signIn()).then(() => {
+          const currentUser = gapi.auth2.getAuthInstance().currentUser.get();
           const signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-          const authResp = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse(true);
+          const authResp = currentUser.getAuthResponse(true);
           if (signedIn && authResp) {
-            console.log(authResp);
+            console.log(`AuthResponse: ${JSON.stringify(authResp)}`);
+            console.log(`SignedIn: ${JSON.stringify(signedIn)}`);
+            console.info(`CurrentUser: ${JSON.stringify(currentUser)}`);
             subscriber.next();
             // subscriber.next(authResp);
           } else {
@@ -88,10 +91,10 @@ export class GapiHandlerProvider {
   public loadDriveNSheetsLibs() {
     return new Observable((subscriber) => {
       gapi.client.load('drive', 'v3').then(() => {
-        console.log('drive is available now');
+        console.log('drive-v3 is available now');
         // console.log(gapi.client.getToken());
         gapi.client.load('sheets', 'v4').then(() => {
-          console.log('drive is available now');
+          console.log('sheets-v4 is available now');
           subscriber.next();
         }).catch((err) => {
           subscriber.error(err);
