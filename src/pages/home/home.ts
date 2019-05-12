@@ -13,7 +13,7 @@ import { NavController, AlertController, ModalController, Platform, LoadingContr
 export class HomePage {
 
   loader: Loading;
-  files = ['Expense tracker - 2018', 'Expense tracker - 2017', 'Logins'];
+  files = ['Expense tracker - 2019', 'Expense tracker - 2018', 'Expense tracker - 2017', 'Logins'];
   loadFiles: boolean = false;
   title: string = 'Select file';
   selectedFile: string;
