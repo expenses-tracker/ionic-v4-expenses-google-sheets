@@ -19,6 +19,7 @@ import * as _ from 'lodash';
 export class DetailPage {
 
   title: string;
+  currency: string = 'Rs';
   spreadsheetId: any;
   loader: Loading;
   spreadSheetData: any;
@@ -64,6 +65,10 @@ export class DetailPage {
   }
 
   private loadAggregates() {
+    const remotecurrency = this.spreadSheetData.data[0].rowData[0].values[1].formattedValue;
+    if (remotecurrency === '$' || remotecurrency === 'Rs') {
+      this.currency = remotecurrency;
+    }
     const data = this.spreadSheetData.data[0].rowData[2].values;
     // console.info('loadAggregates');
     // console.debug(data);
@@ -98,17 +103,19 @@ export class DetailPage {
     for (let index = dataCount; index > 2; index--) {
       const element = data[index].values;
       if (element.length > 3) {
-        this.expensesList.push({
-          id: index,
-          date: element[0].formattedValue,
-          description: element[1].formattedValue,
-          paymentType: element[2].formattedValue,
-          amount: element[3].formattedValue,
-          category: this.identifyCategory(element)
-        });
+        if (element[0].formattedValue) {
+          this.expensesList.push({
+            id: index,
+            date: element[0].formattedValue,
+            description: element[1].formattedValue,
+            paymentType: element[2].formattedValue,
+            amount: element[3].formattedValue,
+            category: this.identifyCategory(element)
+          });
+        }
       }
     }
-    // console.log(this.expensesList);
+    console.log(this.expensesList);
   }
 
   public editExpense(expense) {

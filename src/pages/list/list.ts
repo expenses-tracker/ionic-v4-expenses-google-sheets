@@ -23,7 +23,7 @@ export class ListPage {
   selectedSheet: string;
   loadFiles: boolean = true;
   sheets: Array<{sheetId: string, title: string}> = [];
-  title: string = 'Select file';
+  title: string = 'Select Month';
   spreadSheetData: any;
   spreadSheetId: any;
 
@@ -86,7 +86,7 @@ export class ListPage {
         });
       });
       this.zone.run(() => {
-        this.title = 'Select sheet'
+        this.title = 'Select Month'
         this.loadFiles = false;
       });
     }
