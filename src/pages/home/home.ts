@@ -5,6 +5,7 @@ import { ListPage } from './../list/list';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
 import { Component, NgZone } from '@angular/core';
 import { NavController, AlertController, ModalController, Platform, LoadingController, Loading } from 'ionic-angular';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'page-home',
@@ -15,8 +16,8 @@ export class HomePage {
   loader: Loading;
   files = ['Expense tracker - 2019', 'Expense tracker - 2018', 'Expense tracker - 2017', 'Logins'];
   loadFiles: boolean = false;
-  title: string = 'Select file';
-  selectedFile: string;
+  title: string = '';
+  selectedFile: any;
 
   constructor(
     public navCtrl: NavController,
@@ -32,27 +33,32 @@ export class HomePage {
   ionViewWillEnter(){
     this.plt.ready().then(() => {
       this.presentLoading();
-      if (this.plt.is('cordova')) {
-        this.loadProfile();
-      } else {
-        this.loadBrowserLibsNUserInfo();
-      }
+      this.loadProfile();
     });
   }
 
-  private loadBrowserLibsNUserInfo() {
+  private loadBrowserLibsNUserInfo(isRefresh: boolean) {
     setTimeout(() => {
       this.gapiHandler.loadClientLibs(
         null,
-        '1004371791417-6m5ogkjeibmkl6oi6ptgb9ki47v6hecg.apps.googleusercontent.com'
-      ).subscribe(() => {
+        '1004371791417-6m5ogkjeibmkl6oi6ptgb9ki47v6hecg.apps.googleusercontent.com',
+        isRefresh
+      ).subscribe((data: any) => {
+        this.storage.set('expenseUser', data);
+        //console.log(`Userinfo: ${JSON.stringify(data)}`);
+        this.title = `, ${data.w3.ofa}`;
         console.log('Libs loaded and user authentication complete');
         setTimeout(() => {
           this.gapiHandler.loadDriveNSheetsLibs().subscribe(() => {
-            this.loader.dismissAll();
-            // this.presentProfileInfo(res);
-            this.zone.run(() => {
-              this.loadFiles = true;
+            this.gapiHandler.listExcelFiles().subscribe((data: any) => {
+              const filesList = data.result.files;
+              //console.log(data.result.files);
+              this.files = _.filter(filesList, (o) => { return _.startsWith(o.name,'Expense tracker') });
+              if(this.loader) this.loader.dismissAll();
+              // this.presentProfileInfo(res);
+              this.zone.run(() => {
+                this.loadFiles = true;
+              });
             });
           });
         }, 1000);
@@ -62,18 +68,26 @@ export class HomePage {
 
   private loadProfile() {
     this.isProfileAvailable().subscribe((resp) => {
-      console.log('Trying silent login');
-      this.gapiHandler.trySilentLogin(null,
-        '1004371791417-1fqtb5uppq99qdesjk85gonrfu24c9oi.apps.googleusercontent.com')
-        .subscribe((resp) => {
-          this.loadProfileNLibs(resp);
-        }, (err) => {
-          console.log('Failure in silent login');
-          this.signInWithGoogle();
-        });
+      if (this.plt.is('cordova')) {
+        console.log('Trying silent login');
+        this.gapiHandler.trySilentLogin(null,
+          '1004371791417-1fqtb5uppq99qdesjk85gonrfu24c9oi.apps.googleusercontent.com')
+          .subscribe((resp) => {
+            this.loadProfileNLibs(resp);
+          }, (err) => {
+            console.log('Failure in silent login');
+            this.signInWithGoogle();
+          });
+      } else {
+        this.loadBrowserLibsNUserInfo(false);
+      }
     }, (err) => {
       console.log('No user information found. Fresh login');
-      this.signInWithGoogle();
+      if (this.plt.is('cordova')) {
+        this.signInWithGoogle();
+      } else {
+        this.loadBrowserLibsNUserInfo(true);
+      }
     });
   }
 
@@ -81,7 +95,7 @@ export class HomePage {
     return new Observable((subscriber) => {
       this.storage.get('expenseUser').then((profile) => {
         console.log('LocalStorage get');
-        console.log(profile);
+        //console.log(profile);
         if(profile != null) {
           subscriber.next(true);
         } else {
@@ -118,7 +132,8 @@ export class HomePage {
         // console.log(res);
         this.gapiHandler.loadGapiClientLibraries().subscribe(() => {
           console.log('Google client libs loaded successfully');
-          this.loader.dismissAll();
+          if(this.loader) this.loader.dismissAll();
+          this.loader = undefined;
           // this.presentProfileInfo(res);
           this.loadFiles = true;
         }, (err) => {
@@ -132,7 +147,7 @@ export class HomePage {
     // });
     // modal.present();
     this.navCtrl.push(ListPage, {
-      fileName: this.selectedFile
+      fileName: this.selectedFile.name
     });
   }
 

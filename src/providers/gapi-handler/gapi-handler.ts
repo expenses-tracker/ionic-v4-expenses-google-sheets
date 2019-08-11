@@ -32,7 +32,8 @@ export class GapiHandlerProvider {
     this.clientScopes = scopes;
   }
 
-  public loadClientLibs(scopes: string, clientId: string) {
+  public loadClientLibs(scopes: string, clientId: string, isRefresh?:boolean) {
+    isRefresh = isRefresh || false;
     return new Observable((subscriber) => {
       this.clientScopes = scopes? scopes: gapiScopes;
     this.clientId = clientId;
@@ -49,23 +50,57 @@ export class GapiHandlerProvider {
         scope: this.clientScopes
       })).then(function () {
         // Listen for sign-in state changes.
-        // gapi.auth2.getAuthInstance().signIn();
-        Promise.resolve(gapi.auth2.getAuthInstance().signIn()).then(() => {
+        if (isRefresh) {
+          console.log(`signing in...`);
+          // gapi.auth2.getAuthInstance().signIn();
+          Promise.resolve(gapi.auth2.getAuthInstance().signIn()).then(() => {
+            const currentUser = gapi.auth2.getAuthInstance().currentUser.get();
+            const signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
+            const authResp = currentUser.getAuthResponse(true);
+            if (signedIn && authResp) {
+              // console.log(`AuthResponse: ${JSON.stringify(authResp)}`);
+              // console.log(`SignedIn: ${JSON.stringify(signedIn)}`);
+              // console.info(`CurrentUser: ${JSON.stringify(currentUser)}`);
+              sessionStorage.setItem('expensetokenexpiry', currentUser.Zi.expires_at);
+              subscriber.next(currentUser);
+              // subscriber.next(authResp);
+            } else {
+              subscriber.error();
+            }
+          }).catch((err) => {
+            subscriber.error(err);
+          });
+        } else {
           const currentUser = gapi.auth2.getAuthInstance().currentUser.get();
-          const signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-          const authResp = currentUser.getAuthResponse(true);
-          if (signedIn && authResp) {
-            console.log(`AuthResponse: ${JSON.stringify(authResp)}`);
-            console.log(`SignedIn: ${JSON.stringify(signedIn)}`);
-            console.info(`CurrentUser: ${JSON.stringify(currentUser)}`);
-            subscriber.next();
-            // subscriber.next(authResp);
+          const lastLoginTime = sessionStorage.getItem('expensetokenexpiry');
+          console.log(`Token Expiry time is: ${lastLoginTime}`);
+          if (lastLoginTime != null) {
+            const currTime = Date.now();
+            console.log(`current time is: ${currTime}`);
+            if (currTime > Number.parseInt(lastLoginTime)) {
+              console.log('refreshing auth');
+              currentUser.reloadAuthResponse()
+                .then((res) => {
+                    //console.log(res);
+                    sessionStorage.setItem('expensetokenexpiry', currentUser.Zi.expires_at);
+                    subscriber.next(currentUser);
+                });
+                } else {
+                  console.log('Token is still valid, not refreshing now!');
+                  subscriber.next(currentUser);
+                }
           } else {
-            subscriber.error();
+            console.log('refreshing auth');
+              currentUser.reloadAuthResponse()
+                .then((res) => {
+                    //console.log(res);
+                    sessionStorage.setItem('expensetokenexpiry', currentUser.Zi.expires_at);
+                    subscriber.next(currentUser);
+                });
+            //subscriber.next(currentUser);
           }
-        }).catch((err) => {
-          subscriber.error(err);
-        });
+          
+        }
         // gapi.auth2.getAuthInstance().isSignedIn.listen(() => {
         //   const signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
         //   const authResp = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse(true);
@@ -205,7 +240,7 @@ export class GapiHandlerProvider {
       gapi.client.drive.files.list({
         q: 'mimeType = \'application/vnd.google-apps.spreadsheet\''
       }).then((response) => {
-        // console.log(response);
+        //console.log(response);
         subscriber.next(response);
       }).catch((err) => {
         console.log(err);
