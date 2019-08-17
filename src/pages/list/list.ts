@@ -1,7 +1,7 @@
 import { DetailPage } from './../detail/detail';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading, ModalController, ViewController } from 'ionic-angular';
 import * as _ from 'lodash';
 
 /**
@@ -23,7 +23,7 @@ export class ListPage {
   selectedSheet: string;
   loadFiles: boolean = true;
   sheets: Array<{sheetId: string, title: string}> = [];
-  title: string = 'Select file';
+  title: string = 'Select Month';
   spreadSheetData: any;
   spreadSheetId: any;
 
@@ -31,7 +31,8 @@ export class ListPage {
     private gapiHandler: GapiHandlerProvider,
     public loadingCtrl: LoadingController,
     private modalCtrl: ModalController,
-    private zone: NgZone) {
+    private zone: NgZone,
+    public viewCtrl: ViewController) {
       this.selectedFile = this.navParams.get('fileName');
       this.fileSelected(this.selectedFile);
   }
@@ -39,6 +40,10 @@ export class ListPage {
   ionViewDidLoad() {
     // console.log('ionViewDidLoad ListPage');
     
+  }
+
+  cancel() {
+    this.viewCtrl.dismiss();
   }
 
   public fileSelected(item) {
@@ -59,12 +64,17 @@ export class ListPage {
     this.selectedSheet = item.title;
     let sheetData: any;
     sheetData = _.find(this.spreadSheetData, (o) => { return o.properties.title === this.selectedSheet });
-    const detailModal = this.modalCtrl.create(DetailPage, {
+    // const detailModal = this.modalCtrl.create(DetailPage, {
+    //   'title': this.selectedSheet,
+    //   'sheetData': sheetData,
+    //   'spreadsheetId': this.spreadSheetId
+    // });
+    // detailModal.present();
+    this.navCtrl.push(DetailPage, {
       'title': this.selectedSheet,
       'sheetData': sheetData,
       'spreadsheetId': this.spreadSheetId
     });
-    detailModal.present();
   }
 
   private loadSheets(data: any) {
@@ -76,7 +86,7 @@ export class ListPage {
         });
       });
       this.zone.run(() => {
-        this.title = 'Select sheet'
+        this.title = 'Select Month'
         this.loadFiles = false;
       });
     }

@@ -12,12 +12,12 @@
   <button ion-button block (click)="signInWithGoogle()">Google Sign In</button> -->
   <ion-toolbar *ngIf="loadFiles">
     <ion-title>
-      {{title}}
+      Welcome{{title}}
     </ion-title>
   </ion-toolbar>
   <ion-list *ngIf="loadFiles">
     <button ion-item *ngFor="let item of files" (click)="fileSelected(item)">
-      {{ item }}
+      {{ item.name }}
     </button>  
   </ion-list>
 </ion-content>

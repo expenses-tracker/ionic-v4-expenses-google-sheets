@@ -18,32 +18,32 @@
     <!-- Card displaying the aggregates of expenses in different category -->
   <ion-card>
       <ion-card-header style="white-space:normal; font-weight:700;">
-        Expenses: Rs {{aggregates.expenses}}
+        Expenses: {{currency}} {{aggregates.expenses}}
       </ion-card-header>
       <ion-card-content>
         <ion-grid>
           <ion-row>
             <ion-col>
-              <b>Household: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.household}}</div>
+              <b>Household: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.household}}</div>
             </ion-col>
             <ion-col>
-              <b>Travel: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.travel}}</div> 
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <b>Bills: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.bills}}</div>
-            </ion-col>
-            <ion-col>
-              <b>Food: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.outsideFoods}}</div>
+              <b>Travel: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.travel}}</div> 
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
-              <b>Shopping: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.shopping}}</div>
+              <b>Bills: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.bills}}</div>
             </ion-col>
             <ion-col>
-              <b>Others: </b><div style="color:brown; display:inline-block;"> Rs {{aggregates.others}}</div>
+              <b>Food: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.outsideFoods}}</div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <b>Shopping: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.shopping}}</div>
+            </ion-col>
+            <ion-col>
+              <b>Others: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.others}}</div>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -64,7 +64,7 @@
                     <b>{{expense.description}}</b>
                   </ion-col>
                   <ion-col col-3 style="text-align:right; color:brown">
-                    Rs {{expense.amount}}
+                    {{currency}} {{expense.amount}}
                   </ion-col>
                 </ion-row>
                 <ion-row>

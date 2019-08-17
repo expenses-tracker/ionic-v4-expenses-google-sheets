@@ -1,6 +1,6 @@
 import { NewLoginPage } from './../new-login/new-login';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController, AlertController, ModalController } from 'ionic-angular';
 
 /**
@@ -27,7 +27,8 @@ export class LoginDetailPage {
     private gapiHandler: GapiHandlerProvider,
     public loadingCtrl: LoadingController,
     private modalCtrl: ModalController,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public zone: NgZone) {
       this.loadDetail();
   }
 
@@ -164,14 +165,14 @@ export class LoginDetailPage {
 
     // set val to the value of the searchbar
     let val = ev.target.value;
-    console.log('value enterd: ' + val);
+    // console.log('value enterd: ' + val);
 
     // if the value is an empty string don't filter the items
     if (val && val.trim() != '') {
       this.filterLoginData = this.filterLoginData.filter((item) => {
-        console.log(item);
         return (item.site && item.site.toLowerCase().indexOf(val.toLowerCase()) > -1);
-      })
+      });
+      console.log(this.filterLoginData);
     }
   }
 
