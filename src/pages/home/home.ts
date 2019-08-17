@@ -5,6 +5,7 @@ import { ListPage } from './../list/list';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
 import { Component, NgZone } from '@angular/core';
 import { NavController, AlertController, ModalController, Platform, LoadingController, Loading } from 'ionic-angular';
+import { AppConstants } from '../../app/appconstants';
 import * as _ from 'lodash';
 
 @Component({
@@ -38,10 +39,11 @@ export class HomePage {
   }
 
   private loadBrowserLibsNUserInfo(isRefresh: boolean) {
+    console.log('loadBrowserLibsNUserInfo invoked');
     setTimeout(() => {
       this.gapiHandler.loadClientLibs(
         null,
-        '1004371791417-6m5ogkjeibmkl6oi6ptgb9ki47v6hecg.apps.googleusercontent.com',
+        AppConstants.webClientId,
         isRefresh
       ).subscribe((data: any) => {
         this.storage.set('expenseUser', data);
@@ -67,11 +69,12 @@ export class HomePage {
   }
 
   private loadProfile() {
+    console.log(`platforms: ${JSON.stringify(this.plt.platforms())}`);
     this.isProfileAvailable().subscribe((resp) => {
-      if (this.plt.is('cordova')) {
+      if (this.plt.is(AppConstants.cordova)) {
         console.log('Trying silent login');
         this.gapiHandler.trySilentLogin(null,
-          '1004371791417-1fqtb5uppq99qdesjk85gonrfu24c9oi.apps.googleusercontent.com')
+          AppConstants.webClientId)
           .subscribe((resp) => {
             this.loadProfileNLibs(resp);
           }, (err) => {
@@ -79,13 +82,15 @@ export class HomePage {
             this.signInWithGoogle();
           });
       } else {
+        console.log('browser flow');
         this.loadBrowserLibsNUserInfo(false);
       }
     }, (err) => {
       console.log('No user information found. Fresh login');
-      if (this.plt.is('cordova')) {
+      if (this.plt.is(AppConstants.cordova)) {
         this.signInWithGoogle();
       } else {
+        console.log('browser flow');
         this.loadBrowserLibsNUserInfo(true);
       }
     });
@@ -113,7 +118,7 @@ export class HomePage {
   signInWithGoogle() {
     this.gapiHandler.signIn(
       null,
-      '1004371791417-1fqtb5uppq99qdesjk85gonrfu24c9oi.apps.googleusercontent.com')
+      AppConstants.webClientId)
       .subscribe((res) => {
         this.loadProfileNLibs(res);
       },(err) => {
@@ -124,6 +129,7 @@ export class HomePage {
 
   public loadProfileNLibs(res) {
     this.presentLoading();
+    this.title = `, ${res.givenName}`;
         this.storage.set('expenseUser', res).then((data: any) => {
           console.log('Profile stored successfully for later use');
         }).catch(err => {
@@ -132,10 +138,16 @@ export class HomePage {
         // console.log(res);
         this.gapiHandler.loadGapiClientLibraries().subscribe(() => {
           console.log('Google client libs loaded successfully');
-          if(this.loader) this.loader.dismissAll();
-          this.loader = undefined;
-          // this.presentProfileInfo(res);
-          this.loadFiles = true;
+          this.gapiHandler.listExcelFiles().subscribe((data: any) => {
+            const filesList = data.result.files;
+            //console.log(data.result.files);
+            this.files = _.filter(filesList, (o) => { return _.startsWith(o.name,'Expense tracker') });
+            if(this.loader) this.loader.dismissAll();
+            // this.presentProfileInfo(res);
+            this.zone.run(() => {
+              this.loadFiles = true;
+            });
+          });
         }, (err) => {
           this.showSignInError();
         });

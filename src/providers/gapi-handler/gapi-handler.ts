@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { Observable } from 'rxjs/observable';
+import { AppConstants } from '../../app/appconstants';
 
 declare var gapi: any;
-const gapiScopes: string = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/spreadsheets.readonly';
+const gapiScopes: string = AppConstants.defaultGapiScopes;
 
 /*
   Generated class for the GapiHandlerProvider provider.
@@ -44,9 +45,9 @@ export class GapiHandlerProvider {
       // Initialize the client with API key and People API, and initialize OAuth with an
       // OAuth 2.0 client ID and scopes (space delimited string) to request access.
       Promise.resolve(gapi.client.init({
-        apiKey: 'AIzaSyAJXWPetW--3-6kY0I7kaJJp4Ex7wAE1KU',
-        discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest", "https://sheets.googleapis.com/$discovery/rest?version=v4"],
-        clientId: this.clientId,
+        apiKey: AppConstants.webAPIKey,
+        discoveryDocs: [AppConstants.discoveryDriveUrl, AppConstants.discoverySheetsUrl],
+        clientId: this.clientId ? this.clientId : AppConstants.webClientId,
         scope: this.clientScopes
       })).then(function () {
         // Listen for sign-in state changes.
