@@ -31,30 +31,32 @@
     "@types/gapi.client.drive": "^3.0.0",
     "@types/gapi.client.sheets": "^4.0.0",
     "@types/lodash": "^4.14.104",
-    "cordova-android": "^7.0.0",
-    "cordova-plugin-device": "^2.0.1",
-    "cordova-plugin-googleplus": "^5.2.3",
-    "cordova-plugin-ionic-keyboard": "^2.0.5",
-    "cordova-plugin-ionic-webview": "^1.1.19",
-    "cordova-plugin-splashscreen": "^5.0.2",
-    "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-sqlite-storage": "^2.3.0",
+    "cordova-android": "7.0.0",
+    "cordova-browser": "5.0.3",
+    "cordova-plugin-device": "^2.0.3",
+    "cordova-plugin-googleplus": "^5.3.2",
+    "cordova-plugin-ionic-keyboard": "^2.1.3",
+    "cordova-plugin-ionic-webview": "^1.2.1",
+    "cordova-plugin-splashscreen": "^5.0.3",
+    "cordova-plugin-whitelist": "^1.3.4",
+    "cordova-sqlite-storage": "^2.6.0",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.15",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
     "typings": "^2.1.1",
     "zone.js": "0.8.18"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "3.1.8",
+    "@ionic/app-scripts": "^3.2.4",
     "typescript": "2.4.2"
   },
   "description": "An Ionic project",
   "cordova": {
     "platforms": [
-      "android"
+      "android",
+      "browser"
     ],
     "plugins": {
       "cordova-plugin-whitelist": {},
@@ -64,7 +66,8 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-googleplus": {
-        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.1004371791417-sbargh3lbpqt1h9uket3es33pcfrie9d"
+        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.915694281184-qackv16v5ds9e71n50v8dle1pb753g6g",
+        "WEB_APPLICATION_CLIENT_ID": "915694281184-jbvtnvglq980gh5p9phdmi0n6uk3o6cj.apps.googleusercontent.com"
       }
     }
   }
