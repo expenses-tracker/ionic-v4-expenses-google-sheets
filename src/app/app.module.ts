@@ -7,6 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { IonicStorageModule } from '@ionic/storage';
+import { Push } from '@ionic-native/push';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -39,7 +40,8 @@ import { StorageHandlerProvider } from '../providers/storage-handler/storage-han
     GooglePlus,
     StorageHandlerProvider,
     GapiHandlerProvider,
-    StorageHandlerProvider
+    StorageHandlerProvider,
+    Push
   ]
 })
 export class AppModule {}

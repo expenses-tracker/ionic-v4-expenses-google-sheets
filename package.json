@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "5.0.3",
     "@ionic-native/core": "4.4.0",
     "@ionic-native/google-plus": "^4.5.3",
+    "@ionic-native/push": "^4.20.0",
     "@ionic-native/splash-screen": "4.4.0",
     "@ionic-native/status-bar": "4.4.0",
     "@ionic/storage": "^2.1.3",
@@ -31,7 +32,7 @@
     "@types/gapi.client.drive": "^3.0.0",
     "@types/gapi.client.sheets": "^4.0.0",
     "@types/lodash": "^4.14.104",
-    "cordova-android": "7.0.0",
+    "cordova-android": "7.1.4",
     "cordova-browser": "5.0.3",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-googleplus": "^5.3.2",
@@ -40,9 +41,12 @@
     "cordova-plugin-splashscreen": "^5.0.3",
     "cordova-plugin-whitelist": "^1.3.4",
     "cordova-sqlite-storage": "^2.6.0",
+    "cordova-support-google-services": "^1.1.0",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
     "lodash": "^4.17.15",
+    "phonegap-plugin-multidex": "^1.0.0",
+    "phonegap-plugin-push": "^2.1.3",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
     "typings": "^2.1.1",
@@ -55,8 +59,8 @@
   "description": "An Ionic project",
   "cordova": {
     "platforms": [
-      "android",
-      "browser"
+      "browser",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-whitelist": {},
@@ -67,7 +71,11 @@
       "cordova-sqlite-storage": {},
       "cordova-plugin-googleplus": {
         "REVERSED_CLIENT_ID": "com.googleusercontent.apps.915694281184-qackv16v5ds9e71n50v8dle1pb753g6g",
-        "WEB_APPLICATION_CLIENT_ID": "915694281184-jbvtnvglq980gh5p9phdmi0n6uk3o6cj.apps.googleusercontent.com"
+        "WEB_APPLICATION_CLIENT_ID": "915694281184-jbvtnvglq980gh5p9phdmi0n6uk3o6cj.apps.googleusercontent.com",
+        "PLAY_SERVICES_VERSION": "11.8.0"
+      },
+      "phonegap-plugin-push": {
+        "FCM_VERSION": "11.6.2"
       }
     }
   }

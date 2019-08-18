@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "915694281184",
+    "firebase_url": "https://com-varnit-expense-sheet.firebaseio.com",
+    "project_id": "com-varnit-expense-sheet",
+    "storage_bucket": "com-varnit-expense-sheet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915694281184:android:03447d8a979f3737",
+        "android_client_info": {
+          "package_name": "com.varnit.apps.expense"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915694281184-qackv16v5ds9e71n50v8dle1pb753g6g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.varnit.apps.expense",
+            "certificate_hash": "12d8fc3fbff7ac1075ad8afc1e58aab683efa226"
+          }
+        },
+        {
+          "client_id": "915694281184-jbvtnvglq980gh5p9phdmi0n6uk3o6cj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfct_hkMjVLzAFi1334juT6MzZUfM8L38"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915694281184-jbvtnvglq980gh5p9phdmi0n6uk3o6cj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
