@@ -17,11 +17,6 @@ steps:
 
 - task: Npm@1
   inputs:
-    command: 'cache clean --force'
-  displayName: 'Clean npm cache'
-
-- task: Npm@1
-  inputs:
     command: 'install'
   displayName: 'Execute npm install'
 
