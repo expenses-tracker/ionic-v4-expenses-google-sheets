@@ -19,7 +19,7 @@ steps:
   inputs:
     ionicCommand: 'cordova build android'
     ionicArgs: 'android'
-    ionicVersion: '3.9.6'
+    ionicVersion: '3.20.1'
     cordovaVersion: '8.1.2'
 
 - task: CopyFiles@2
