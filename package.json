@@ -1,7 +1,7 @@
 {
-  "name": "ionic-google-auth-drive",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
+  "name": "ionic-expense-sheets",
+  "version": "0.1.0",
+  "author": "Varghese Abraham",
   "homepage": "http://ionicframework.com/",
   "private": true,
   "scripts": {
