@@ -15,6 +15,10 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
+- task: Npm@1
+  inputs:
+    command: 'install'
+
 - task: IonicCommand@1
   inputs:
     ionicCommand: 'cordova build android'
