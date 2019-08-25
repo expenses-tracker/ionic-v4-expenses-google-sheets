@@ -17,7 +17,7 @@ steps:
 
 - task: Npm@1
   inputs:
-    command: 'cache clear --force'
+    command: 'cache clean --force'
   displayName: 'Clean npm cache'
 
 - task: Npm@1
