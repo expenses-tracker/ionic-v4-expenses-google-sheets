@@ -15,13 +15,15 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- task: NpmCacheClean@1
+- task: Npm@1
   inputs:
     command: 'cache clear --force'
+  displayName: 'Clean npm cache'
 
-- task: NpmInstall@1
+- task: Npm@1
   inputs:
     command: 'install'
+  displayName: 'Execute npm install'
 
 - task: IonicCommand@1
   inputs:
