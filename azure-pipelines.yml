@@ -15,27 +15,27 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- task: Npm@1
+- task: NpmCacheClean@1
   inputs:
     command: 'cache clear --force'
 
-- task: NpmInstall@2
+- task: NpmInstall@1
   inputs:
     command: 'install'
 
-- task: IonicCommand@3
+- task: IonicCommand@1
   inputs:
     ionicCommand: 'cordova build android'
     ionicArgs: 'android'
     ionicVersion: '3.20.1'
     cordovaVersion: '8.1.2'
 
-- task: CopyFiles@4
+- task: CopyFiles@2
   inputs:
     SourceFolder: 'platforms/android/app/build/outputs/apk/debug/'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-- task: PublishBuildArtifacts@5
+- task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'package'
