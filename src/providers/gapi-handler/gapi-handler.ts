@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GooglePlus } from '@ionic-native/google-plus';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import { AppConstants } from '../../app/appconstants';
 
 declare var gapi: any;

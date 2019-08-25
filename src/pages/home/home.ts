@@ -1,5 +1,5 @@
 import { LoginDetailPage } from './../login-detail/login-detail';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import { StorageHandlerProvider } from './../../providers/storage-handler/storage-handler';
 import { ListPage } from './../list/list';
 import { GapiHandlerProvider } from './../../providers/gapi-handler/gapi-handler';
