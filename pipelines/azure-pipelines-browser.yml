@@ -31,6 +31,13 @@ steps:
   inputs:
     SourceFolder: 'www'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy files to deploy'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'firebase.json'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy firebase.json for deployment setup'
 
 - task: PublishBuildArtifacts@1
   inputs:
