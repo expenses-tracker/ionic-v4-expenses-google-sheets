@@ -35,7 +35,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)/firebase.json'
+    SourceFolder: '$(Build.Repository.LocalPath)/firebase.json'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Copy firebase.json for deployment setup'
 
