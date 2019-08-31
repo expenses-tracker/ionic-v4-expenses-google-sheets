@@ -1,2 +1,18 @@
-# ionic-google-auth-drive (Work in progress)
-Ionic app with google authentication and drive API integration
+#Expense Sheets Application
+
+##Platforms
+ - Android
+ - Browser
+
+##IDE
+ - Visual Studio Code
+
+##Language
+ - Ionic + Angular
+
+##Build 
+ - Azure DevOps
+
+##Hosting 
+ - Android
+ - Firebase(browser)
