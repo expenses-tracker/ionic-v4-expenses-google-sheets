@@ -22,14 +22,14 @@ steps:
 
 - task: IonicCommand@1
   inputs:
-    ionicCommand: 'cordova build android'
+    ionicCommand: 'cordova build android --prod --release'
     ionicArgs: 'android'
     ionicVersion: '3.20.1'
     cordovaVersion: '8.1.2'
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: 'platforms/android/app/build/outputs/apk/debug/'
+    SourceFolder: 'platforms/android/app/build/outputs/apk/release/'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
