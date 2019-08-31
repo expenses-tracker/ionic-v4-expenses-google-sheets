@@ -30,7 +30,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'www'
-    TargetFolder: 'public'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/public'
   displayName: 'Copy files to deploy'
 
 - task: CopyFiles@2
