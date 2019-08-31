@@ -33,6 +33,13 @@ steps:
     TargetFolder: '$(Build.ArtifactStagingDirectory)/public'
   displayName: 'Copy files to deploy'
 
+- task: CopyFiles@2
+  inputs:
+    Contents: '**\firebase.json'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    OverWrite: true/
+  displayName: 'Copy firebase config for deployment'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
