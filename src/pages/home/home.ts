@@ -7,6 +7,7 @@ import { Component, NgZone } from '@angular/core';
 import { NavController, AlertController, ModalController, Platform, LoadingController, Loading } from 'ionic-angular';
 import { AppConstants } from '../../app/appconstants';
 import * as _ from 'lodash';
+import { DetailPage } from '../detail/detail';
 
 @Component({
   selector: 'page-home',
@@ -158,7 +159,7 @@ export class HomePage {
     //   fileName: this.selectedFile
     // });
     // modal.present();
-    this.navCtrl.push(ListPage, {
+    this.navCtrl.push(DetailPage, {
       fileName: this.selectedFile.name
     });
   }
