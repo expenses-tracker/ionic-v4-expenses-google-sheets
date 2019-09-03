@@ -1,3 +1,14 @@
 page-home {
-
+  .app-title {
+    font-weight: bold;
+    padding-left: 12px;
+    font-size: large;
+  }
+  ion-card {
+    max-width:240px;
+    max-height: 240px;
+  }
+  ion-fab {
+    padding-right: 20px;
+  }
 }

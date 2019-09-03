@@ -23,7 +23,10 @@ export class DetailPage {
   spreadsheetId: any;
   loader: Loading;
   spreadSheetData: any;
+  masterData: any;
   aggregates: any;
+  selectedFile: string;
+  selectedMonth: string;
   expensesList: Array<{
     id: number,
     date: string,
@@ -32,6 +35,7 @@ export class DetailPage {
     amount: string,
     category: string
   }> = [];
+  sheets: Array<{sheetId: string, title: string}> = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public loadingCtrl: LoadingController,
@@ -40,11 +44,11 @@ export class DetailPage {
     private gapiHandler: GapiHandlerProvider,
     private zone: NgZone) {
     this.presentLoading();
-    this.loadData();
+    this.selectedFile = this.navParams.get('fileName');
+    this.fileSelected(this.selectedFile);
   }
 
   ionViewDidLoad() {
-    // console.log(this.spreadSheetData);
     this.loader.dismiss();
   }
 
@@ -57,17 +61,16 @@ export class DetailPage {
   }
 
   private loadData() {
-    this.title = this.navParams.get('title');
-    this.spreadSheetData = this.navParams.get('sheetData');
-    this.spreadsheetId = this.navParams.get('spreadsheetId');
+    this.title = this.selectedFile;
     this.loadAggregates();
     this.loadExpenses();
   }
 
   private loadAggregates() {
-    const remotecurrency = this.spreadSheetData.data[0].rowData[0].values[1].formattedValue;
-    if (remotecurrency === '$' || remotecurrency === 'Rs') {
-      this.currency = remotecurrency;
+    this.spreadSheetData = _.find(this.masterData, (o) => { return o.properties.title === this.selectedMonth });
+    const remoteCurrency = this.spreadSheetData.data[0].rowData[0].values[1].formattedValue;
+    if (remoteCurrency === '$' || remoteCurrency === 'Rs') {
+      this.currency = remoteCurrency;
     }
     const data = this.spreadSheetData.data[0].rowData[2].values;
     // console.info('loadAggregates');
@@ -91,11 +94,37 @@ export class DetailPage {
     }
   }
 
+  private loadSheets(data: any) {
+    if(data) {
+      this.sheets = [];
+      data.forEach(element => {
+        this.sheets.push({
+          sheetId: element.properties.sheetId,
+          title: element.properties.title
+        });
+      });
+      if (this.sheets.length > 0) {
+        this.selectedMonth = this.sheets[0].title;
+      }
+    }
+  }
+
+  public fileSelected(item) {
+    this.presentLoading();
+    this.gapiHandler.getSpreadSheetIdForExcel(item).subscribe((response: any) => {
+      // console.log(response.id);
+      this.gapiHandler.getSpreadSheetData(response.id).subscribe((data: any) => {
+        this.spreadsheetId = data.result.spreadsheetId;
+        this.masterData = data.result.sheets;
+        this.loadSheets(this.masterData);
+        this.loadData();
+      });
+    });
+  }
+
   private loadExpenses() {
     this.expensesList = [];
     const data = this.spreadSheetData.data[0].rowData;
-    // console.info('loadExpenses');
-    // console.debug(this.spreadSheetData);
     let dataCount = data.length -1;
     if(dataCount > 100) {
       dataCount = 100;
@@ -119,11 +148,10 @@ export class DetailPage {
   }
 
   public editExpense(expense) {
-    // console.log('Edit expense' + JSON.stringify(expense));
     const detailModal = this.modalCtrl.create(NewExpensePage, {
       'spreadsheetId': this.spreadsheetId,
       'noOfExpenses': this.expensesList.length + 3,
-      'sheet': this.title,
+      'sheet': this.selectedMonth,
       'edit': true,
       'expenseData': expense
     });
@@ -142,7 +170,7 @@ export class DetailPage {
     const detailModal = this.modalCtrl.create(NewExpensePage, {
       'spreadsheetId': this.spreadsheetId,
       'noOfExpenses': this.expensesList.length + 3,
-      'sheet': this.title,
+      'sheet': this.selectedMonth,
       'edit': false
     });
     detailModal.onDidDismiss((data) => {
@@ -158,7 +186,7 @@ export class DetailPage {
 
   public deleteExpense(expense) {
     this.presentLoading();
-    const range: string = this.title + '!A' + (expense.id + 1) + ':K' + (expense.id + 1);
+    const range: string = this.selectedMonth + '!A' + (expense.id + 1) + ':K' + (expense.id + 1);
     this.gapiHandler.deleteDataInSpreadSheet(this.spreadsheetId, range).subscribe((data: any) => {
        this.refreshData();
     }, (err) => {
@@ -181,22 +209,35 @@ export class DetailPage {
   }
 
   private refreshData() {
-    this.gapiHandler.getSpreadSheetData(this.spreadsheetId).subscribe((data: any) => {
-      const spreadSheetData = data.result.sheets;
-      this.zone.run(() => {
-        this.spreadSheetData = _.find(spreadSheetData, (o) => { return o.properties.title === this.title });
-        this.loadAggregates();
-        this.loadExpenses();
+    // this.gapiHandler.getSpreadSheetData(this.spreadsheetId).subscribe((data: any) => {
+    //   const spreadSheetData = data.result.sheets;
+    //   this.zone.run(() => {
+    //     this.spreadSheetData = _.find(spreadSheetData, (o) => { return o.properties.title === this.selectedMonth });
+    //     this.loadAggregates();
+    //     this.loadExpenses();
+    //   });
+    //   this.loader.dismiss();
+    // });
+
+    this.gapiHandler.getSpreadSheetIdForExcel(this.title).subscribe((response: any) => {
+      // console.log(response.id);
+      this.gapiHandler.getSpreadSheetData(response.id).subscribe((data: any) => {
+        this.spreadsheetId = data.result.spreadsheetId;
+        this.masterData = data.result.sheets;
+        this.zone.run(() => {
+          this.loadSheets(this.masterData);
+          this.loadData();
+        });
+        this.loader.dismiss();
       });
-      this.loader.dismiss();
     });
   }
 
   private identifyCategory(expense: Array<any>) {
-    const defaultCategorues = ['Household', 'Travel', 'Bills', 'Outside Food', 'Shopping', 'Others'];
+    const defaultCategories = ['Household', 'Travel', 'Bills', 'Outside Food', 'Shopping', 'Others'];
     const expenseDataLength = expense.length;
     const categoryIdx = expenseDataLength - 5;
-    const category = defaultCategorues[categoryIdx];
+    const category = defaultCategories[categoryIdx];
     return category;
   }
 

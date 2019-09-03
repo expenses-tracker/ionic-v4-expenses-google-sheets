@@ -14,46 +14,54 @@
         </button>
       </ion-buttons>
   </ion-navbar>
-  <ion-toolbar>
-    <!-- Card displaying the aggregates of expenses in different category -->
-  <ion-card>
-      <ion-card-header style="white-space:normal; font-weight:700;">
-        Expenses: {{currency}} {{aggregates.expenses}}
-      </ion-card-header>
-      <ion-card-content>
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <b>Household: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.household}}</div>
-            </ion-col>
-            <ion-col>
-              <b>Travel: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.travel}}</div> 
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <b>Bills: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.bills}}</div>
-            </ion-col>
-            <ion-col>
-              <b>Food: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.outsideFoods}}</div>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <b>Shopping: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.shopping}}</div>
-            </ion-col>
-            <ion-col>
-              <b>Others: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.others}}</div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-  </ion-toolbar>
+
 </ion-header>
 
 
 <ion-content>
+    <ion-toolbar>
+        <!-- Card displaying the aggregates of expenses in different category -->
+      <ion-card *ngIf="aggregates">
+          <ion-card-header style="white-space:normal; font-weight:700; padding-bottom: inherit;">
+            <ion-grid>
+              <ion-row>
+                  <div col-9>Expenses: {{currency}} {{aggregates.expenses}}</div>
+                  <ion-select [(ngModel)]="selectedMonth" col-3 interface="popover" (ionChange)="loadData()">
+                      <ion-option [value]="sheetInfo.title" *ngFor="let sheetInfo of sheets" >{{sheetInfo.title}}</ion-option>
+                    </ion-select>
+              </ion-row>
+            </ion-grid>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <b>Household: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.household}}</div>
+                </ion-col>
+                <ion-col>
+                  <b>Travel: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.travel}}</div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <b>Bills: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.bills}}</div>
+                </ion-col>
+                <ion-col>
+                  <b>Food: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.outsideFoods}}</div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <b>Shopping: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.shopping}}</div>
+                </ion-col>
+                <ion-col>
+                  <b>Others: </b><div style="color:brown; display:inline-block;"> {{currency}} {{aggregates.others}}</div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-toolbar>
   <!-- List of expenses -->
   <ion-list>
     <ion-item-sliding *ngFor="let expense of expensesList">
