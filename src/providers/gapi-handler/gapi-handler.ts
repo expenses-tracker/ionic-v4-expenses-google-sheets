@@ -62,7 +62,7 @@ export class GapiHandlerProvider {
               // console.log(`AuthResponse: ${JSON.stringify(authResp)}`);
               // console.log(`SignedIn: ${JSON.stringify(signedIn)}`);
               // console.info(`CurrentUser: ${JSON.stringify(currentUser)}`);
-              sessionStorage.setItem('expensetokenexpiry', currentUser.Zi.expires_at);
+              sessionStorage.setItem('expensetokenexpiry', currentUser.expires_at);
               subscriber.next(currentUser);
               // subscriber.next(authResp);
             } else {
@@ -82,8 +82,8 @@ export class GapiHandlerProvider {
               console.log('refreshing auth');
               currentUser.reloadAuthResponse()
                 .then((res) => {
-                    //console.log(res);
-                    sessionStorage.setItem('expensetokenexpiry', currentUser.Zi.expires_at);
+                    // console.log(res);
+                    sessionStorage.setItem('expensetokenexpiry', currentUser.expires_at);
                     subscriber.next(currentUser);
                 });
                 } else {
@@ -94,8 +94,8 @@ export class GapiHandlerProvider {
             console.log('refreshing auth');
               currentUser.reloadAuthResponse()
                 .then((res) => {
-                    //console.log(res);
-                    sessionStorage.setItem('expensetokenexpiry', currentUser.Zi.expires_at);
+                    // console.log(res);
+                    sessionStorage.setItem('expensetokenexpiry', currentUser.expires_at);
                     subscriber.next(currentUser);
                 });
             //subscriber.next(currentUser);

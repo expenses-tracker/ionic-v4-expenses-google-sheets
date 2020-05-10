@@ -48,8 +48,8 @@ export class HomePage {
         isRefresh
       ).subscribe((data: any) => {
         this.storage.set('expenseUser', data);
-        //console.log(`Userinfo: ${JSON.stringify(data)}`);
-        this.title = `, ${data.w3.ofa}`;
+        // console.log(`Userinfo: ${JSON.stringify(data)}`);
+        this.title = `, ${data.Pt.Ad}`;
         console.log('Libs loaded and user authentication complete');
         setTimeout(() => {
           this.gapiHandler.loadDriveNSheetsLibs().subscribe(() => {
