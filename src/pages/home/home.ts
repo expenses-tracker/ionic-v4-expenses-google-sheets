@@ -49,13 +49,13 @@ export class HomePage {
       ).subscribe((data: any) => {
         this.storage.set('expenseUser', data);
         // console.log(`Userinfo: ${JSON.stringify(data)}`);
-        this.title = `, ${data.Pt.Ad}`;
+        this.title = `, ${data.At.kV}`;
         console.log('Libs loaded and user authentication complete');
         setTimeout(() => {
           this.gapiHandler.loadDriveNSheetsLibs().subscribe(() => {
             this.gapiHandler.listExcelFiles().subscribe((data: any) => {
               const filesList = data.result.files;
-              //console.log(data.result.files);
+              // console.log(data.result.files);
               this.files = _.filter(filesList, (o) => { return _.startsWith(o.name,'Expense tracker') });
               if(this.loader) this.loader.dismissAll();
               // this.presentProfileInfo(res);
